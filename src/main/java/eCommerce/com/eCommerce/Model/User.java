@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.Stack;
 
 @Data
@@ -40,5 +41,14 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private UserAddress userAddress;
+    @OneToMany(mappedBy = "user")
+    private Set<UserPayment> userPayments;
+    @OneToOne(mappedBy = "user")
+    private ShoppingCart shoppingCart;
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private OrderDetails orderDetails;
+
+
+
 
 }

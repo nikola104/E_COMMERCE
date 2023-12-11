@@ -33,6 +33,7 @@ public class Product {
     @Lob
     @Column(nullable = true)
     private byte[] imageData;
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subcategory_id", nullable = true)
@@ -43,6 +44,10 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "inventory_id", referencedColumnName = "id")
     private Inventory inventory;
+    @OneToOne(mappedBy = "product")
+    private CartItem cartItem;
+    @OneToOne(mappedBy = "product")
+    private OrderItem orderItem;
 
 
 }
