@@ -1,4 +1,4 @@
-package eCommerce.com.eCommerce.Model;
+package eCommerce.com.eCommerce.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,29 +6,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
-@Table(name="payment_details")
-public class PaymentDetails {
+@Table(name = "user_address")
+public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Long orderId;
+    private String addressLine1;
     @Column(nullable = false)
-    private double totalPrice;
+    private String addressLine2;
     @Column(nullable = false)
-    private String provider;
+    private String city;
     @Column(nullable = false)
-    private String status;
+    private String postcode;
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @OneToOne(mappedBy = "paymentDetails")
-    private OrderDetails orderDetails;
+    private String country;
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @OneToOne(mappedBy = "userAddress")
+    private User user;
+
 
 }

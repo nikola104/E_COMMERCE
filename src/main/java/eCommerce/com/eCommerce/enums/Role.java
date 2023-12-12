@@ -1,4 +1,4 @@
-package eCommerce.com.eCommerce.Enum;
+package eCommerce.com.eCommerce.enums;
 
 public enum Role {
     USER,

@@ -1,6 +1,6 @@
-package eCommerce.com.eCommerce.Model;
+package eCommerce.com.eCommerce.model;
 
-import eCommerce.com.eCommerce.Enum.Role;
+import eCommerce.com.eCommerce.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
