@@ -1,4 +1,4 @@
-package eCommerce.com.eCommerce.Model;
+package eCommerce.com.eCommerce.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="cart_item")
-public class CartItem {
+@Table(name="order_item")
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private Long quantity;
-    @Column
+    @Column(nullable = false)
     private double price;
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shopping_cart_id")
-    private ShoppingCart shoppingCart;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_details_id")
+    private OrderDetails orderDetails;
 }

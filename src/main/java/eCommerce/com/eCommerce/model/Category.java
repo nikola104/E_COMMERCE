@@ -1,4 +1,4 @@
-package eCommerce.com.eCommerce.Model;
+package eCommerce.com.eCommerce.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,18 +13,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "type")
-public class Type {
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "subcategory_id")
-    private Subcategory subcategory;
-    @OneToMany(mappedBy = "type")
-    private Set<Product> products;
-
-
+    @OneToMany(mappedBy = "category")
+    private Set<Subcategory> subcategories;
 }
