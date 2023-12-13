@@ -18,7 +18,12 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-
+    /**
+     * @param http the http
+     * @return the security filter chain
+     * @throws Exception the exception
+     * This method is used to configure the http security
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

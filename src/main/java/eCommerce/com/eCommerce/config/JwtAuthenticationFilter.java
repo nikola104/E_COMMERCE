@@ -23,7 +23,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JWTServiceImpl jwtService;
     private final UserDetailsService userDetailsService;
 
-
+    /**
+     * @param request the request
+     * @param response the response
+     * @param filterChain the filter chain
+     * @throws ServletException the servlet exception
+     * @throws IOException the io exception
+     * This method is used to filter the request and response
+     */
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
