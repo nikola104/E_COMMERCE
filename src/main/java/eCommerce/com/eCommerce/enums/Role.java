@@ -14,7 +14,7 @@ import static eCommerce.com.eCommerce.enums.Permission.*;
 @RequiredArgsConstructor
 
 public enum Role {
-    Customer(
+    CUSTOMER(
             Set.of(
                     PRODUCT_READ,
                     ORDER_DETAILS_READ
