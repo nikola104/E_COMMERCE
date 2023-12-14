@@ -1,17 +1,21 @@
 package eCommerce.com.eCommerce.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eCommerce.com.eCommerce.dto.request.AuthenticationRequest;
 import eCommerce.com.eCommerce.dto.request.RegistrationRequest;
 import eCommerce.com.eCommerce.dto.response.AuthenticationResponse;
 import eCommerce.com.eCommerce.model.User;
 import eCommerce.com.eCommerce.service.UserService;
 import eCommerce.com.eCommerce.service.impl.JWTServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -73,5 +77,29 @@ public class AuthenticationService {
             throw new BadCredentialsException("Invalid username or password");
         }
 
+    }
+
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String authHeader = request.getHeader("Authorization");
+        final String refreshToken;
+        final String userEmail;
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            return;
+        }
+        refreshToken = authHeader.substring(7);
+        userEmail = jwtService.extractEmail(refreshToken);
+        if(userEmail != null){
+            var user = userService.findByEmail(userEmail);
+            if(jwtService.isTokenValid(refreshToken, user)){
+                var accessToken = jwtService.generateToken(user);
+                var newRefreshToken = jwtService.generateRefreshToken(user);
+                var authResponse = AuthenticationResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(newRefreshToken)
+                        .build();
+                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+            }
+
+        }
     }
 }

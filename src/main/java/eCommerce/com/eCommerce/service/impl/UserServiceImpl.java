@@ -5,6 +5,8 @@ import eCommerce.com.eCommerce.repository.UserRepository;
 import eCommerce.com.eCommerce.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -22,5 +24,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).get();
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
