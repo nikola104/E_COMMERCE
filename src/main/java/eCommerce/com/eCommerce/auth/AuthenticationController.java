@@ -5,6 +5,7 @@ import eCommerce.com.eCommerce.dto.request.RegistrationRequest;
 import eCommerce.com.eCommerce.dto.response.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +25,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistrationRequest request){
+    public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request){
         String response = authenticationService.register(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request){
 
         return ResponseEntity.ok(authenticationService.authenticate(request));
 
