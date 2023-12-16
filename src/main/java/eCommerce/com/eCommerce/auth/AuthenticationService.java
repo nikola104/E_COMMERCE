@@ -33,6 +33,10 @@ public class AuthenticationService {
     }
 
     public String register(RegistrationRequest request) {
+        if(!(request.getPassword().equals(request.getConfirmPassword()))){
+            //password does not match
+            throw new BadCredentialsException("Password and confirm password must be the same!");
+        }
             var user = User.builder()
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
@@ -49,11 +53,6 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        if(!(request.getPassword().equals(request.getConfirmPassword()))){
-            //password does not match
-            throw new BadCredentialsException("Password and confirm password must be the same");
-        }
-
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -73,8 +72,8 @@ public class AuthenticationService {
                     .build();
 
         }catch (BadCredentialsException e){
-            //da hvurlq cutom exception
-            throw new BadCredentialsException("Invalid username or password");
+
+            throw new BadCredentialsException("Invalid email or password");
         }
 
     }
