@@ -1,5 +1,6 @@
 package eCommerce.com.eCommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,12 +25,14 @@ public class UserAddress {
     private String city;
     @Column(nullable = false)
     private String postcode;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String country;
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "userAddress")
+
+    @OneToOne(cascade = CascadeType.MERGE,optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
 

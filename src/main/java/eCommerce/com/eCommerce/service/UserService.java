@@ -1,7 +1,8 @@
 package eCommerce.com.eCommerce.service;
 
+import eCommerce.com.eCommerce.dto.UserInfoDto;
 import eCommerce.com.eCommerce.model.User;
-import org.springframework.stereotype.Service;
+import eCommerce.com.eCommerce.model.UserAddress;
 
 import java.util.List;
 
@@ -12,4 +13,8 @@ public interface UserService {
     public User findByEmail(String email);
 
     List<User> getAllUsers();
+
+    UserInfoDto getUserDtoById(Long id);
+
+    User getUserById(Long userId);
 }

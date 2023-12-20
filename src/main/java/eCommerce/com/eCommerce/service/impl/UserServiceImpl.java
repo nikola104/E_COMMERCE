@@ -1,16 +1,23 @@
 package eCommerce.com.eCommerce.service.impl;
 
+import eCommerce.com.eCommerce.dto.UserInfoDto;
+import eCommerce.com.eCommerce.exception.UserNotFoundException;
 import eCommerce.com.eCommerce.model.User;
+import eCommerce.com.eCommerce.model.UserAddress;
 import eCommerce.com.eCommerce.repository.UserRepository;
+import eCommerce.com.eCommerce.service.UserAddressService;
 import eCommerce.com.eCommerce.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -23,11 +30,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).get();
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found!"));
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        if(users.isEmpty()){
+            throw new UserNotFoundException("Users not found!");
+        }
+        return users;
+    }
+
+    @Override
+    public UserInfoDto getUserDtoById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+            return UserInfoDto.builder()
+                    .id(user.getId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .role(user.getRole())
+                    .build();
+
+    }
+
+
+
+    @Override
+    public User getUserById(Long userId) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        return user;
     }
 }

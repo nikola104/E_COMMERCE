@@ -1,5 +1,6 @@
 package eCommerce.com.eCommerce.config;
 
+import eCommerce.com.eCommerce.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +28,13 @@ public class GlobalExceptionHandler {
        return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(), HttpStatus.BAD_REQUEST);
 
     }
-/*    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleNotFoundException(UserNotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }*/
+    }
 
-    @ExceptionHandler(Exception.class)
+/*    @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 
     private Map<String,List<String>> getErrorsMap(List<String> errors) {
         Map<String,List<String>> errorResponse = new HashMap<>();

@@ -1,18 +1,14 @@
 package eCommerce.com.eCommerce.model;
 
+
 import eCommerce.com.eCommerce.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -30,7 +26,7 @@ public class User implements UserDetails {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
@@ -43,8 +39,9 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
     @Column(nullable = true)
     private Stack<Product> lastSeenProducts;
-    @OneToOne(cascade = CascadeType.ALL, optional = true)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+
+
+    @OneToOne(mappedBy = "user")
     private UserAddress userAddress;
     @OneToMany(mappedBy = "user")
     private Set<UserPayment> userPayments;
@@ -83,4 +80,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
