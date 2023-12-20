@@ -35,7 +35,7 @@ public class AuthenticationService {
     public String register(RegistrationRequest request) {
         if(!(request.getPassword().equals(request.getConfirmPassword()))){
             //password does not match
-            throw new BadCredentialsException("Password and confirm password must be the same!");
+            throw new BadCredentialsException("The password does not match!");
         }
             var user = User.builder()
                     .firstName(request.getFirstName())

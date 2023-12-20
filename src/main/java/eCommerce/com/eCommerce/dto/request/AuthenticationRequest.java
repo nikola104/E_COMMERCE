@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthenticationRequest {
     @Email(message = "Invalid Email")
+    @NotBlank(message = "Invalid Password: Empty Password")
+    @NotNull(message = "Invalid Password: Password is NULL")
     private String email;
     @NotBlank(message = "Invalid Password: Empty Password")
     @NotNull(message = "Invalid Password: Password is NULL")

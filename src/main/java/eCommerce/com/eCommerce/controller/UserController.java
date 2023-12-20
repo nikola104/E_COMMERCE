@@ -1,13 +1,13 @@
 package eCommerce.com.eCommerce.controller;
 
+import eCommerce.com.eCommerce.dto.UserInfoDto;
 import eCommerce.com.eCommerce.model.User;
+import eCommerce.com.eCommerce.model.UserAddress;
 import eCommerce.com.eCommerce.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,9 +22,15 @@ public class UserController {
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/get-all-users")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
-
     }
+    @GetMapping("/get-user/{id}")
+    public ResponseEntity<UserInfoDto> getUSerById(@PathVariable Long id){
+    return new ResponseEntity<>(userService.getUserDtoById(id),HttpStatus.OK);
+    }
+
+
+
 }
