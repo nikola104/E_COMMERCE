@@ -26,9 +26,13 @@ public class UserController {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-    @GetMapping("/get-user/{id}")
+    @GetMapping("/get-user-by-id/{id}")
     public ResponseEntity<UserInfoDto> getUSerById(@PathVariable Long id){
     return new ResponseEntity<>(userService.getUserDtoById(id),HttpStatus.OK);
+    }
+    @DeleteMapping("/delete-user-by-id/{id}")
+    public ResponseEntity<String> deleteUserById(@PathVariable Long id){
+        return new ResponseEntity<>(userService.deleteUserById(id),HttpStatus.OK);
     }
 
 

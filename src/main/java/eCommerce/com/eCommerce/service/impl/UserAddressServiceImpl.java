@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class UserAddressServiceImpl implements UserAddressService {
@@ -35,6 +37,12 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public UserAddress saveUserAddress(UserAddressRequest userAddressRequest) {
+        List<UserAddress> userAddressList = userAddressRepository.findAll();
+        for(UserAddress userAddress : userAddressList){
+            if(userAddress.getPhoneNumber().equals(userAddressRequest.getPhoneNumber())){
+                throw new UserNotFoundException("This phone number already exists!");
+            }
+        }
 
         var user = userService.getUserById(userAddressRequest.getUser().getId());
         var userAddress = UserAddress.builder()
@@ -55,13 +63,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public UserAddressDto getUserAddress(Long id) {
         var userAddress = userAddressRepository.findByUserId(id).orElseThrow(() -> new UserNotFoundException("User address not found!"));
-        var userDto = UserInfoDto.builder()
-                .firstName(userAddress.getUser().getFirstName())
-                .lastName(userAddress.getUser().getLastName())
-                .email(userAddress.getUser().getEmail())
-                .createdAt(userAddress.getUser().getCreatedAt())
-                .role(userAddress.getUser().getRole())
-                .build();
+
 
         var userAddressDto = UserAddressDto.builder()
                 .addressLine1(userAddress.getAddressLine1())
@@ -70,7 +72,6 @@ public class UserAddressServiceImpl implements UserAddressService {
                 .country(userAddress.getCountry())
                 .city(userAddress.getCity())
                 .postcode(userAddress.getPostcode())
-                .userInfo(userDto)
                 .build();
 
         return userAddressDto;
@@ -79,7 +80,8 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public String deleteUserAddress(Long id) {
-        userAddressRepository.deleteByUserId(id);
+        var userAddress = userAddressRepository.findByUserId(id).orElseThrow(() -> new UserNotFoundException("User address not found!"));
+        userAddressRepository.deleteByUserId(userAddress.getUser().getId());
         return "User address deleted successfully!";
 
     }

@@ -1,6 +1,8 @@
 package eCommerce.com.eCommerce.config;
 
+import eCommerce.com.eCommerce.exception.DuplicateValueException;
 import eCommerce.com.eCommerce.exception.UserNotFoundException;
+import eCommerce.com.eCommerce.exception.UserPaymentNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,21 @@ public class GlobalExceptionHandler {
 
     }
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, List<String>>> handleNotFoundException(UserNotFoundException ex) {
+    public ResponseEntity<Map<String, List<String>>> handleUserNotFoundException(UserNotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(UserPaymentNotFoundException.class)
+    public ResponseEntity<Map<String,List<String>>> handleUserPaymentNotFoundException(UserPaymentNotFoundException ex){
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.NOT_FOUND);
+
+    }
+    @ExceptionHandler(DuplicateValueException.class)
+    public ResponseEntity<Map<String,List<String>>> handleDuplicateValueException(DuplicateValueException ex){
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.BAD_REQUEST);
+
     }
 
 /*    @ExceptionHandler(Exception.class)

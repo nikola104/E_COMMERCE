@@ -17,4 +17,6 @@ public interface UserService {
     UserInfoDto getUserDtoById(Long id);
 
     User getUserById(Long userId);
+
+    String deleteUserById(Long id);
 }
