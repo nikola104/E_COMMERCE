@@ -25,8 +25,6 @@ public class UserPayment {
     @Column(nullable = false)
     private String expiryYear;
     @Column(nullable = false)
-    private String cvc;
-    @Column(nullable = false)
     private String holderName;
     @Column(nullable = false)
     private boolean defaultPayment;

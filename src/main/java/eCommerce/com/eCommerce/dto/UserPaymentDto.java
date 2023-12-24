@@ -1,6 +1,5 @@
 package eCommerce.com.eCommerce.dto;
 
-import eCommerce.com.eCommerce.model.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -10,22 +9,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserAddressDto {
+public class UserPaymentDto {
 
-    private String addressLine1;
+    private String cardName;
 
-    private String addressLine2;
+    private String cardNumber;
 
-    private String city;
+    private String expiryMonth;
 
-    private String postcode;
+    private String expiryYear;
 
-    private String country;
-
-    private String phoneNumber;
-
+    private String holderName;
 
 }
