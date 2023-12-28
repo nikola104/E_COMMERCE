@@ -28,7 +28,8 @@ public class UserPayment {
     private String holderName;
     @Column(nullable = false)
     private boolean defaultPayment;
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
+
 }

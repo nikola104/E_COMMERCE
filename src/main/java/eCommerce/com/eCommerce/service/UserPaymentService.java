@@ -14,4 +14,8 @@ public interface UserPaymentService {
     String setAsDefaultPayment(String userCardNumber);
 
     UserPaymentDto getUserPaymentById(String cardNumber);
+
+    String deleteUserPayment(String cardNumber);
+
+    String updateUserPayment(UserPaymentRequest userPaymentRequest, String cardNumber);
 }

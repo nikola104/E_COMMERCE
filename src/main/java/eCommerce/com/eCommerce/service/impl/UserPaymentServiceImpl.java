@@ -101,6 +101,25 @@ public class UserPaymentServiceImpl implements UserPaymentService {
                 .build();
     }
 
+    @Override
+    public String deleteUserPayment(String cardNumber) {
+        var userPayment = userPaymentRepository.findByCardNumber(cardNumber).orElseThrow(() -> new UserPaymentNotFoundException("User payment not found!"));
+        userPaymentRepository.deleteByCardNumber(userPayment.getCardNumber());
+        return "The payment card deleted successfully!";
+    }
+
+    @Override
+    public String updateUserPayment(UserPaymentRequest userPaymentRequest, String cardNumber) {
+        var userPayment = userPaymentRepository.findByCardNumber(cardNumber).orElseThrow(() -> new UserPaymentNotFoundException("User payment not found!"));
+        userPayment.setCardName(userPaymentRequest.getCardName());
+        userPayment.setCardNumber(userPaymentRequest.getCardNumber());
+        userPayment.setExpiryMonth(userPaymentRequest.getExpiryMonth());
+        userPayment.setExpiryYear(userPaymentRequest.getExpiryYear());
+        userPayment.setHolderName(userPaymentRequest.getHolderName());
+        userPaymentRepository.save(userPayment);
+        return "User payment updated successfully!";
+    }
+
     private void saveTheNewListInDB(List<UserPayment> newUserPaymentList) {
         for(UserPayment userPayment : newUserPaymentList){
             userPaymentRepository.save(userPayment);
