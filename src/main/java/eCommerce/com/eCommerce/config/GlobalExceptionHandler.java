@@ -1,8 +1,6 @@
 package eCommerce.com.eCommerce.config;
 
-import eCommerce.com.eCommerce.exception.DuplicateValueException;
-import eCommerce.com.eCommerce.exception.UserNotFoundException;
-import eCommerce.com.eCommerce.exception.UserPaymentNotFoundException;
+import eCommerce.com.eCommerce.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +45,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.BAD_REQUEST);
 
     }
+    @ExceptionHandler(TypeNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleTypeNotFoundException(TypeNotFoundException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleCategoryNotFoundException(CategoryNotFoundException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(SubcategoryNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleSubcategoryNotFoundException(SubcategoryNotFoundException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
 
 /*    @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
