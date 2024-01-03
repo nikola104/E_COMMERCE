@@ -27,6 +27,19 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getAllCategories(){
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
+    @PutMapping("/update-category/{name}")
+    public ResponseEntity<String> updateCategory(@RequestBody @Valid CategoryRequest categoryRequest, @PathVariable String name){
+        return new ResponseEntity<>(categoryService.updateCategory(categoryRequest,name), HttpStatus.OK);
+    }
+    @DeleteMapping("/delete-category/{name}")
+    public ResponseEntity<String> deleteCategory(@PathVariable String name){
+        return new ResponseEntity<>(categoryService.deleteCategory(name), HttpStatus.OK);
+    }
+    @GetMapping("/get-category/{name}")
+    public ResponseEntity<Category> getCategory(@PathVariable  String name){
+        return new ResponseEntity<>(categoryService.getCategory(name), HttpStatus.OK);
+    }
+
 
 
 }
