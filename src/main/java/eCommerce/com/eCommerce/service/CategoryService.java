@@ -9,4 +9,10 @@ public interface CategoryService {
     String saveCategory(CategoryRequest categoryRequest);
 
     List<Category> getAllCategories();
+
+    String updateCategory(CategoryRequest categoryRequest, String name);
+
+    String deleteCategory(String name);
+
+    Category getCategory(String name);
 }

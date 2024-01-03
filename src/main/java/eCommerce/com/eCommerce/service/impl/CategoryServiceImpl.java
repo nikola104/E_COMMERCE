@@ -36,4 +36,27 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return categories;
     }
+
+    @Override
+    public String updateCategory(CategoryRequest categoryRequest, String name) {
+        var category = categoryRepository.findByName(name)
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found!"));
+        category.setName(categoryRequest.getName());
+        categoryRepository.save(category);
+        return "Category updated successfully!";
+    }
+
+    @Override
+    public String deleteCategory(String name) {
+        var category = categoryRepository.findByName(name)
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found!"));
+        categoryRepository.delete(category);
+        return "Category deleted successfully!";
+    }
+    @Override
+    public Category getCategory(String name) {
+        return categoryRepository.findByName(name).orElseThrow(
+                ()-> new CategoryNotFoundException("Category not found!") );
+    }
+
 }
