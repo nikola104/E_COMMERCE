@@ -15,7 +15,6 @@ public interface UserPaymentRepository extends JpaRepository<UserPayment, Long> 
     List<UserPayment> findAllByUserId(Long userId);
     Optional<UserPayment> findByCardNumber(String cardNumber);
     Optional<UserPayment> findByUserId(Long userId);
-
     @Transactional
     void deleteByCardNumber(String cardNumber);
 }

@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user")
     private UserAddress userAddress;
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "user")
     private Set<UserPayment> userPayments;
     @OneToOne(mappedBy = "user")
     private ShoppingCart shoppingCart;
