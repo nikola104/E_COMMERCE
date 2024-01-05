@@ -59,4 +59,10 @@ public class CategoryServiceImpl implements CategoryService {
                 ()-> new CategoryNotFoundException("Category not found!") );
     }
 
+    @Override
+    public Category getCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(
+                ()-> new CategoryNotFoundException("Category not found!") );
+    }
+
 }

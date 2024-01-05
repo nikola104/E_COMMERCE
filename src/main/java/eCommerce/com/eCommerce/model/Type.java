@@ -20,7 +20,7 @@ public class Type {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
     @OneToMany(mappedBy = "type")

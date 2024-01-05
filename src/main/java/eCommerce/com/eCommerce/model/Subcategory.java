@@ -25,7 +25,7 @@ public class Subcategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "subcategory")
+    @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Type> types;
     @OneToMany(mappedBy = "subcategory")
     private Set<Product> products;
