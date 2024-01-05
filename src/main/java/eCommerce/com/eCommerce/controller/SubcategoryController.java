@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/subcategory")
 public class SubcategoryController {
@@ -33,6 +35,10 @@ public class SubcategoryController {
     @DeleteMapping("/delete-subcategory/{id}")
     public ResponseEntity<String> deleteSubcategory(@PathVariable Long id){
         return new ResponseEntity<>(subcategoryService.deleteSubcategory(id), HttpStatus.OK);
+    }
+    @GetMapping("/get-all-subcategories")
+    public ResponseEntity<List<Subcategory>> getAllSubcategories(){
+        return new ResponseEntity<>(subcategoryService.getAllSubcategories(), HttpStatus.OK);
     }
 
 }
