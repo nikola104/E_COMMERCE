@@ -35,14 +35,13 @@ public class Product {
     private byte[] imageData;
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "subcategory_id", nullable = true)
     private Subcategory subcategory;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "type_id", nullable = true)
     private Type type;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "inventory_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "product")
     private Inventory inventory;
     @OneToOne(mappedBy = "product")
     private CartItem cartItem;
