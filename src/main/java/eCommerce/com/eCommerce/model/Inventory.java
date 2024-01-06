@@ -18,7 +18,8 @@ public class Inventory {
     private Long id;
     @Column
     private Long quantity;
-    @OneToOne(mappedBy = "inventory")
+    @OneToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
 
