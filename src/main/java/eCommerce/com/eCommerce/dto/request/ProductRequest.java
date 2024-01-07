@@ -25,28 +25,9 @@ public class ProductRequest {
     @NotBlank(message = "Invalid color: Empty color")
     @NotNull(message = "Invalid color: color is NULL")
     private String color;
-    @NotBlank(message = "Invalid sku: Empty sku")
-    @NotNull(message = "Invalid sku: sku is NULL")
-    private String sku;
     @NotBlank(message = "Invalid material: Empty material")
     @NotNull(message = "Invalid material: material is NULL")
     private String material;
-
-    private Long views;
-
-    private byte[] imageData;
-
-    @NotNull(message = "Invalid Created At: Created At is NULL")
-    private LocalDateTime createdAt;
-
-
-    private Subcategory subcategory;
-
-    private Type type;
-
-    private Inventory inventory;
-
-    private CartItem cartItem;
-
-    private OrderItem orderItem;
+    private Long subcategoryId;
+    private Long typeId;
 }
