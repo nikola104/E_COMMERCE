@@ -3,12 +3,15 @@ package eCommerce.com.eCommerce.controller;
 import eCommerce.com.eCommerce.dto.request.ProductRequest;
 import eCommerce.com.eCommerce.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductService productService;
 
@@ -17,10 +20,10 @@ public class ProductController {
         this.productService = productService;
     }
     @PostMapping("/save-product")
-    public ResponseEntity<String> saveProduct(@RequestBody @Valid ProductRequest productRequest,
-                                              @RequestParam("image")MultipartFile image){
+    public ResponseEntity<String> saveProduct(@RequestPart("data") @Valid ProductRequest productRequest,
+                                              @RequestPart("image") MultipartFile image) throws IOException {
 
-return null;
+        return new ResponseEntity<>(productService.saveProduct(productRequest, image), HttpStatus.CREATED);
 
     }
 
