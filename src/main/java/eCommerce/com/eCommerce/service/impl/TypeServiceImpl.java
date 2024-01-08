@@ -1,6 +1,7 @@
 package eCommerce.com.eCommerce.service.impl;
 
 import eCommerce.com.eCommerce.dto.request.TypeRequest;
+import eCommerce.com.eCommerce.exception.DuplicateValueException;
 import eCommerce.com.eCommerce.exception.TypeNotFoundException;
 import eCommerce.com.eCommerce.model.Type;
 import eCommerce.com.eCommerce.repository.TypeRepository;
@@ -22,6 +23,12 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public String saveType(TypeRequest typeRequest) {
+        var typesList = typeRepository.findAll();
+        for(Type type : typesList){
+            if(type.getName().equals(typeRequest.getName())){
+                throw new DuplicateValueException("This type already exists!");
+            }
+        }
         var subcategory = subcategoryService.getSubcategory(typeRequest.getSubcategoryId());
         var type = Type.builder()
                 .name(typeRequest.getName())

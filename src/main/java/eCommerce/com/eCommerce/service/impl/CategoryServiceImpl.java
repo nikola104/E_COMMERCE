@@ -2,6 +2,7 @@ package eCommerce.com.eCommerce.service.impl;
 
 import eCommerce.com.eCommerce.dto.request.CategoryRequest;
 import eCommerce.com.eCommerce.exception.CategoryNotFoundException;
+import eCommerce.com.eCommerce.exception.DuplicateValueException;
 import eCommerce.com.eCommerce.model.Category;
 import eCommerce.com.eCommerce.repository.CategoryRepository;
 import eCommerce.com.eCommerce.service.CategoryService;
@@ -19,6 +20,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public String saveCategory(CategoryRequest categoryRequest) {
+        List<Category> categoryList = categoryRepository.findAll();
+        for(Category category : categoryList){
+            if(category.getName().equals(categoryRequest.getName())){
+                throw new DuplicateValueException("This category already exists!");
+            }
+        }
+
         Category category = Category.builder()
                 .name(categoryRequest.getName())
                 .build();

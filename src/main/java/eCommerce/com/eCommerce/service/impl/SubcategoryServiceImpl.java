@@ -2,6 +2,7 @@ package eCommerce.com.eCommerce.service.impl;
 
 import eCommerce.com.eCommerce.dto.request.SubcategoryRequest;
 import eCommerce.com.eCommerce.exception.CategoryNotFoundException;
+import eCommerce.com.eCommerce.exception.DuplicateValueException;
 import eCommerce.com.eCommerce.exception.SubcategoryNotFoundException;
 import eCommerce.com.eCommerce.model.Category;
 import eCommerce.com.eCommerce.model.Subcategory;
@@ -25,6 +26,12 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     public String saveSubcategory(SubcategoryRequest request) {
+        var subcategoriesList = subcategoryRepository.findAll();
+        for(Subcategory subcategory : subcategoriesList){
+            if(subcategory.getName().equals(request.getName())){
+                throw new DuplicateValueException("This subcategory already exists!");
+            }
+        }
         var category = categoryService.getCategory(request.getCategoryId());
 
         var subcategory = Subcategory.builder()

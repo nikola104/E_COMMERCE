@@ -31,7 +31,7 @@ public class Product {
     @Column
     private Long views;
     @Lob
-    @Column(nullable = true)
+    @Column(columnDefinition = "LONGBLOB",nullable = true)
     private byte[] imageData;
     @Column(nullable = false)
     private LocalDateTime createdAt;
