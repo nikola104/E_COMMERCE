@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +30,8 @@ public class Product {
     @Column
     private String material;
     @Column
+    private double rating;
+    @Column
     private Long views;
     @Lob
     @Column(columnDefinition = "LONGBLOB",nullable = true)
@@ -47,6 +50,8 @@ public class Product {
     private CartItem cartItem;
     @OneToOne(mappedBy = "product")
     private OrderItem orderItem;
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews;
 
 
 }

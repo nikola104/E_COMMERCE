@@ -1,0 +1,2 @@
+ALTER TABLE product
+ADD COLUMN rating DOUBLE DEFAULT 0.0;

@@ -1,6 +1,7 @@
 package eCommerce.com.eCommerce.controller;
 
 import eCommerce.com.eCommerce.dto.request.ProductRequest;
+import eCommerce.com.eCommerce.dto.ProductDto;
 import eCommerce.com.eCommerce.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,10 @@ public class ProductController {
 
         return new ResponseEntity<>(productService.saveProduct(productRequest, image), HttpStatus.CREATED);
 
+    }
+    @GetMapping("/get-product-by-id/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
+        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
 
