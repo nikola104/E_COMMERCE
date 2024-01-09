@@ -1,5 +1,6 @@
 package eCommerce.com.eCommerce.service.impl;
 
+import eCommerce.com.eCommerce.dto.ProductDto;
 import eCommerce.com.eCommerce.dto.request.ProductRequest;
 import eCommerce.com.eCommerce.model.Product;
 import eCommerce.com.eCommerce.model.Subcategory;
@@ -33,6 +34,10 @@ public class ProductServiceImpl implements ProductService {
         byte[] imageData = image.getBytes();
 
         if(productRequest.getTypeId() == null && productRequest.getSubcategoryId() == null){
+            throw new IllegalStateException("The product must have a type or a subcategory!");
+        }
+
+        if(productRequest.getTypeId() != null && productRequest.getSubcategoryId() != null){
             throw new NullPointerException("You must choose a subcategory or a type!");
         }
 
@@ -52,6 +57,11 @@ public class ProductServiceImpl implements ProductService {
 
         return "Product saved successfully!";
 
+    }
+
+    @Override
+    public ProductDto getProductById(Long id) {
+        return null;
     }
 
 
