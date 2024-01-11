@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -17,11 +18,12 @@ public class ProductDto {
     private String description;
     private String color;
     private String material;
-    private String category;
+    private String categoryName;
+
     private String subcategoryName;
     private String typeName;
     private byte[] imageData;
     private double rating;
-    private Set<Review> reviews;
+    private List<Review> reviews;
 
 }

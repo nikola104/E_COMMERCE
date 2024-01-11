@@ -25,13 +25,9 @@ public class Review {
     private int rating;
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    @ManyToMany
-    @JoinTable(
-            name = "user_review",
-            joinColumns = @JoinColumn(name = "review_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
