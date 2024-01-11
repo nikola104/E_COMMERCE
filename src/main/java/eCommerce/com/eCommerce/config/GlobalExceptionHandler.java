@@ -50,6 +50,11 @@ public class GlobalExceptionHandler {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleReviewNotFoundException(ReviewNotFoundException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleProductNotFoundException(ProductNotFoundException ex) {
