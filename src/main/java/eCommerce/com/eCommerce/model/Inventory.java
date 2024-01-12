@@ -1,5 +1,6 @@
 package eCommerce.com.eCommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "inventory")
+//za posle bydirectional endless loop
+//@JsonIgnoreProperties({"product"})
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

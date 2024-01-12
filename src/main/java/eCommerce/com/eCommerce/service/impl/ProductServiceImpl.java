@@ -3,22 +3,15 @@ package eCommerce.com.eCommerce.service.impl;
 import eCommerce.com.eCommerce.dto.ProductDto;
 import eCommerce.com.eCommerce.dto.request.ProductRequest;
 import eCommerce.com.eCommerce.exception.ProductNotFoundException;
-import eCommerce.com.eCommerce.model.Product;
-import eCommerce.com.eCommerce.model.Review;
-import eCommerce.com.eCommerce.model.Subcategory;
-import eCommerce.com.eCommerce.model.Type;
+import eCommerce.com.eCommerce.model.*;
 import eCommerce.com.eCommerce.repository.ProductRepository;
-import eCommerce.com.eCommerce.service.ProductService;
-import eCommerce.com.eCommerce.service.ReviewService;
-import eCommerce.com.eCommerce.service.SubcategoryService;
-import eCommerce.com.eCommerce.service.TypeService;
+import eCommerce.com.eCommerce.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 
@@ -28,17 +21,23 @@ public class ProductServiceImpl implements ProductService {
     private final SubcategoryService subcategoryService;
     private final ReviewService reviewService;
     private final TypeService typeService;
+    private final InventoryService inventoryService;
 
-    public ProductServiceImpl(ProductRepository productRepository, SubcategoryService subcategoryService, ReviewService reviewService, TypeService typeService) {
+    public ProductServiceImpl(ProductRepository productRepository, SubcategoryService subcategoryService, ReviewService reviewService, TypeService typeService, InventoryService inventoryService) {
         this.productRepository = productRepository;
         this.subcategoryService = subcategoryService;
         this.reviewService = reviewService;
         this.typeService = typeService;
+        this.inventoryService = inventoryService;
     }
 
     @Override
     public String saveProduct(ProductRequest productRequest, MultipartFile image) throws IOException {
-        byte[] imageData = image.getBytes();
+        //if there is no image, the imageData will be null
+        byte[] imageData = null;
+        if(image != null){
+            imageData = image.getBytes();
+        }
 
         if(productRequest.getTypeId() == null && productRequest.getSubcategoryId() == null){
             throw new IllegalStateException("The product must have a type or a subcategory!");
@@ -51,15 +50,30 @@ public class ProductServiceImpl implements ProductService {
         //generating sku for a product
         String sku = skuGenerator(productRequest);
 
+
+
         if(productRequest.getTypeId() != null && productRequest.getSubcategoryId() == null){
           var type = typeService.getType(productRequest.getTypeId());
           var product = saveProductWithType(productRequest, imageData, sku, type);
           productRepository.save(product);
+          var productWithInventory = productRepository.findBySku(sku).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+          var inventory = Inventory.builder()
+                  .quantity(productRequest.getQuantity())
+                  .product(productWithInventory)
+                  .build();
+            inventoryService.saveInventory(inventory);
+
         }
         if(productRequest.getTypeId() == null && productRequest.getSubcategoryId() != null){
             var subcategory = subcategoryService.getSubcategory(productRequest.getSubcategoryId());
             var product = saveProductWithSubcategory(productRequest, imageData, sku, subcategory);
             productRepository.save(product);
+            var productWithInventory = productRepository.findBySku(sku).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+            var inventory = Inventory.builder()
+                    .quantity(productRequest.getQuantity())
+                    .product(productWithInventory)
+                    .build();
+            inventoryService.saveInventory(inventory);
         }
 
         return "Product saved successfully!";

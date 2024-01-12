@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -22,9 +23,9 @@ public class ProductController {
     }
     @PostMapping("/save-product")
     public ResponseEntity<String> saveProduct(@RequestPart("data") @Valid ProductRequest productRequest,
-                                              @RequestPart("image") MultipartFile image) throws IOException {
+                                              @RequestPart("image") Optional<MultipartFile> image) throws IOException {
 
-        return new ResponseEntity<>(productService.saveProduct(productRequest, image), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.saveProduct(productRequest, image.orElse(null)), HttpStatus.CREATED);
 
     }
     @GetMapping("/get-product-by-id/{id}")

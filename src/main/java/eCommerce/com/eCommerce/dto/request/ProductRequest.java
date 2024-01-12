@@ -25,6 +25,8 @@ public class ProductRequest {
     @NotBlank(message = "Invalid color: Empty color")
     @NotNull(message = "Invalid color: color is NULL")
     private String color;
+    @NotNull(message = "Invalid quantity: quantity is NULL")
+    private Long quantity;
     @NotBlank(message = "Invalid material: Empty material")
     @NotNull(message = "Invalid material: material is NULL")
     private String material;
