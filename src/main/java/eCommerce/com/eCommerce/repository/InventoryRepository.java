@@ -1,12 +1,13 @@
 package eCommerce.com.eCommerce.repository;
 
-import eCommerce.com.eCommerce.model.Product;
+import eCommerce.com.eCommerce.model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>{
-    Optional<Product> findBySku(String sku);
+public interface InventoryRepository extends JpaRepository<Inventory, Long>{
+    Optional<Inventory> findByProductId(Long productId);
+
 }

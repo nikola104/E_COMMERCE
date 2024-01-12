@@ -19,7 +19,6 @@ public class ProductDto {
     private String color;
     private String material;
     private String categoryName;
-
     private String subcategoryName;
     private String typeName;
     private byte[] imageData;
