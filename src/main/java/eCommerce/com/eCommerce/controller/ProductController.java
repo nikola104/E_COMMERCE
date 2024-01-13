@@ -21,7 +21,7 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @PostMapping("/save-product")
+    @PostMapping("/save-product") //todo: to add product category
     public ResponseEntity<String> saveProduct(@RequestPart("data") @Valid ProductRequest productRequest,
                                               @RequestPart("image") Optional<MultipartFile> image) throws IOException {
 
@@ -32,6 +32,7 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
+
 
 
 
