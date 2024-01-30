@@ -1,5 +1,6 @@
 package eCommerce.com.eCommerce.service.impl;
 
+import eCommerce.com.eCommerce.dto.request.ReviewRequest;
 import eCommerce.com.eCommerce.exception.ReviewNotFoundException;
 import eCommerce.com.eCommerce.model.Review;
 import eCommerce.com.eCommerce.repository.ReviewRepository;
@@ -20,5 +21,10 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> findAllReviewsByProductId(Long id) {
         List<Review> reviews = reviewRepository.findAllByProductId(id);
         return reviews;
+    }
+
+    @Override
+    public String saveReview(ReviewRequest request) {
+        return null;
     }
 }

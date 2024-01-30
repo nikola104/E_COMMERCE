@@ -1,0 +1,2 @@
+ALTER TABLE review
+ADD COLUMN likes int(11) NOT NULL DEFAULT 0;

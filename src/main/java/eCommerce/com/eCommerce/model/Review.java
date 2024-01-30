@@ -23,6 +23,8 @@ public class Review {
     private String comment;
     @Column
     private int rating;
+    @Column
+    private int likes;
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @ManyToOne
