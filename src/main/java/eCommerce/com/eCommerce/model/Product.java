@@ -33,6 +33,8 @@ public class Product {
     private double rating;
     @Column
     private Long views;
+    @Column(nullable = false)
+    private int quantity;
     @Lob
     @Column(columnDefinition = "LONGBLOB",nullable = true)
     private byte[] imageData;
@@ -44,8 +46,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = true)
     private Type type;
-    @OneToOne(mappedBy = "product")
-    private Inventory inventory;
     @OneToOne(mappedBy = "product")
     private CartItem cartItem;
     @OneToOne(mappedBy = "product")
