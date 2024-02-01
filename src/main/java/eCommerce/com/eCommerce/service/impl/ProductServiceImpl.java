@@ -2,6 +2,7 @@ package eCommerce.com.eCommerce.service.impl;
 
 import eCommerce.com.eCommerce.dto.ProductDto;
 import eCommerce.com.eCommerce.dto.request.ProductRequest;
+import eCommerce.com.eCommerce.dto.request.UpdateQuantityRequest;
 import eCommerce.com.eCommerce.exception.ProductNotFoundException;
 import eCommerce.com.eCommerce.model.*;
 import eCommerce.com.eCommerce.repository.ProductRepository;
@@ -84,6 +85,14 @@ public class ProductServiceImpl implements ProductService {
 
         var productDto = getProductRightProduct(product, productReviews);
         return productDto;
+    }
+
+    @Override
+    public String updateProductQuantity(Long id, UpdateQuantityRequest updateQuantityRequest) {
+        var product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+        product.setQuantity(updateQuantityRequest.getQuantity());
+        productRepository.save(product);
+        return "Product quantity updated successfully!";
     }
 
     private ProductDto getProductRightProduct(Product product, List<Review> productReviews) {

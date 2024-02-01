@@ -7,21 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewRequest {
-
-    private String comment;
-    @NotNull(message = "Invalid rating is NULL")
-    private Double rating;
-    @NotNull(message = "Invalid userId is NULL")
-    private Long productId;
-    @NotNull(message = "Invalid userId is NULL")
-    private Long userId;
-
-
-
+public class UpdateQuantityRequest {
+    @NotNull(message = "Invalid quantity: quantity is NULL")
+    @NotBlank(message = "Invalid quantity: You have to input quantity")
+   private Integer quantity;
 }

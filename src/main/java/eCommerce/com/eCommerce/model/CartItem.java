@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name="cart_item")
-public class CartItem {
+public class
+CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
