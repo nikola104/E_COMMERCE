@@ -2,6 +2,7 @@ package eCommerce.com.eCommerce.controller;
 
 import eCommerce.com.eCommerce.dto.request.ProductRequest;
 import eCommerce.com.eCommerce.dto.ProductDto;
+import eCommerce.com.eCommerce.dto.request.UpdateQuantityRequest;
 import eCommerce.com.eCommerce.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,13 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
+    @PatchMapping("/update-product-quantity/{id}")
+    public ResponseEntity<String> updateProductQuantity(@PathVariable Long id, @RequestBody UpdateQuantityRequest updateQuantityRequest){
+        return new ResponseEntity<>(productService.updateProductQuantity(id,updateQuantityRequest),HttpStatus.OK);
 
-        //todo to patch the product quantity
+    }
+
+
 
 
 
