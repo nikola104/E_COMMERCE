@@ -34,7 +34,11 @@ public class Product {
     @Column
     private Long views;
     @Column(nullable = false)
-    private int quantity;
+    private Long quantity;
+    @Column
+    private String quantityStatus;
+    @Column(nullable = false)
+    private Double price;
     @Lob
     @Column(columnDefinition = "LONGBLOB",nullable = true)
     private byte[] imageData;

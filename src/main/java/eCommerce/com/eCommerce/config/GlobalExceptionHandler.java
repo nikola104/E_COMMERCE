@@ -33,28 +33,43 @@ public class GlobalExceptionHandler {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(UserPaymentNotFoundException.class)
     public ResponseEntity<Map<String,List<String>>> handleUserPaymentNotFoundException(UserPaymentNotFoundException ex){
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.NOT_FOUND);
-
     }
+
     @ExceptionHandler(DuplicateValueException.class)
     public ResponseEntity<Map<String,List<String>>> handleDuplicateValueException(DuplicateValueException ex){
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.BAD_REQUEST);
-
     }
+
+    @ExceptionHandler(ShoppingCartNotFoundException.class)
+    public ResponseEntity<Map<String,List<String>>> handleShoppingCartNotFoundException(ShoppingCartNotFoundException ex){
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ItemIsOutOfStockException.class)
+    public ResponseEntity<Map<String,List<String>>> handleItemIsOutOfStockException(ItemIsOutOfStockException ex){
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(InventoryNotFoundException.class)
     public ResponseEntity<Map<String,List<String>>> handleInventoryNotFoundException(InventoryNotFoundException ex){
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors),new HttpHeaders(),HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(TypeNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleTypeNotFoundException(TypeNotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleReviewNotFoundException(ReviewNotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
@@ -66,11 +81,13 @@ public class GlobalExceptionHandler {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleCategoryNotFoundException(CategoryNotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(SubcategoryNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleSubcategoryNotFoundException(SubcategoryNotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
@@ -90,6 +107,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }*/
 
+    //returning a map of errors
     private Map<String,List<String>> getErrorsMap(List<String> errors) {
         Map<String,List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors",errors);

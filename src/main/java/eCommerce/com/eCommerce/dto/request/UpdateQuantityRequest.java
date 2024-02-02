@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class UpdateQuantityRequest {
     @NotNull(message = "Invalid quantity: quantity is NULL")
     @NotBlank(message = "Invalid quantity: You have to input quantity")
-   private Integer quantity;
+   private Long quantity;
 }
