@@ -45,7 +45,7 @@ public class User implements UserDetails {
     private UserAddress userAddress;
     @OneToMany(mappedBy = "user")
     private Set<UserPayment> userPayments;
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private ShoppingCart shoppingCart;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews;

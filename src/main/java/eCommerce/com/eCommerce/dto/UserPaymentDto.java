@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserPaymentDto {
-
     private String cardName;
 
     private String cardNumber;

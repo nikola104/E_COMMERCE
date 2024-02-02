@@ -23,7 +23,7 @@ public class ShoppingCart {
     private double totalPrice;
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    @OneToOne(cascade = CascadeType.ALL,optional = false)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL,orphanRemoval = true)
