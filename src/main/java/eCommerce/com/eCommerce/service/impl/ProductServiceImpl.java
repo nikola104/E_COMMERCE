@@ -81,10 +81,27 @@ public class ProductServiceImpl implements ProductService {
         List<Review> productReviews = reviewService.findAllReviewsByProductId(id);
         //incrementing the views of the product
         product.setViews(product.getViews() + 1);
+
+        //checking the quantity status of the product
+        String quantityStatus = null;
+
+        if(product.getQuantity() <= 10){
+            quantityStatus = "RUNNING LOW - Less than 10 available";
+        }
+        if(product.getQuantity() <= 20 && product.getQuantity() > 10){
+            quantityStatus = "HURRY UP - Selling out fast!";
+        }
+
+        product.setQuantityStatus(quantityStatus);
         productRepository.save(product);
 
         var productDto = getProductRightProduct(product, productReviews);
         return productDto;
+    }
+
+    @Override
+    public Product findProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
     }
 
     @Override
@@ -93,6 +110,14 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantity(updateQuantityRequest.getQuantity());
         productRepository.save(product);
         return "Product quantity updated successfully!";
+    }
+
+    @Override
+    public void saveProduct(Product product) {
+        if(product == null){
+            throw new ProductNotFoundException("Product is null!");
+        }
+        productRepository.save(product);
     }
 
     private ProductDto getProductRightProduct(Product product, List<Review> productReviews) {
@@ -107,6 +132,8 @@ public class ProductServiceImpl implements ProductService {
                     .subcategoryName(product.getSubcategory().getName())
                     .categoryName(product.getSubcategory().getCategory().getName())
                     .reviews(productReviews)
+                    .price(product.getPrice())
+                    .quantityStatus(product.getQuantityStatus())
                     .rating(product.getRating())
                     .build();
         }
@@ -120,6 +147,8 @@ public class ProductServiceImpl implements ProductService {
                      .subcategoryName(product.getSubcategory().getName())
                      .categoryName(product.getSubcategory().getCategory().getName())
                      .reviews(productReviews)
+                      .price(product.getPrice())
+                      .quantityStatus(product.getQuantityStatus())
                      .rating(product.getRating())
                      .build();
        }
@@ -134,12 +163,22 @@ public class ProductServiceImpl implements ProductService {
         return sku;
     }
     public Product saveProductWithType(ProductRequest productRequest, byte[] imageData, String sku, Type type){
+        String quantityStatus = null;
+
+        if(productRequest.getQuantity() <= 10){
+            quantityStatus = "RUNNING LOW - Less than 10 available";
+        }
+        if(productRequest.getQuantity() <= 20 && productRequest.getQuantity() > 10){
+            quantityStatus = "HURRY UP - Selling out fast!";
+        }
         return Product.builder()
                 .productName(productRequest.getProductName())
                 .description(productRequest.getDescription())
                 .color(productRequest.getColor())
                 .material(productRequest.getMaterial())
+                .price(productRequest.getPrice())
                 .views(0L)
+                .quantityStatus(quantityStatus)
                 .quantity(productRequest.getQuantity())
                 .imageData(imageData)
                 .sku(sku)
@@ -148,12 +187,24 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
     public Product saveProductWithSubcategory(ProductRequest productRequest, byte[] imageData, String sku, Subcategory subcategory){
+
+        String quantityStatus = null;
+
+        if(productRequest.getQuantity() < 10){
+            quantityStatus = "RUNNING LOW - Less than 10 available";
+        }
+        if(productRequest.getQuantity() <= 20 && productRequest.getQuantity() > 10){
+            quantityStatus = "HURRY UP - Selling out fast!";
+        }
+
        return Product.builder()
                 .productName(productRequest.getProductName())
                 .description(productRequest.getDescription())
                 .color(productRequest.getColor())
                 .material(productRequest.getMaterial())
+                .price(productRequest.getPrice())
                 .views(0L)
+                .quantityStatus(quantityStatus)
                 .quantity(productRequest.getQuantity())
                 .imageData(imageData)
                 .sku(sku)

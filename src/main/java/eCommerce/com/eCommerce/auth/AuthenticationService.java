@@ -5,6 +5,7 @@ import eCommerce.com.eCommerce.dto.request.AuthenticationRequest;
 import eCommerce.com.eCommerce.dto.request.RegistrationRequest;
 import eCommerce.com.eCommerce.dto.response.AuthenticationResponse;
 import eCommerce.com.eCommerce.model.User;
+import eCommerce.com.eCommerce.service.ShoppingCartService;
 import eCommerce.com.eCommerce.service.UserService;
 import eCommerce.com.eCommerce.service.impl.JWTServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +25,14 @@ public class AuthenticationService {
     private final JWTServiceImpl jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final ShoppingCartService shoppingCartService;
 
-    public AuthenticationService(UserService userService, JWTServiceImpl jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+    public AuthenticationService(UserService userService, JWTServiceImpl jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, ShoppingCartService shoppingCartService) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.shoppingCartService = shoppingCartService;
     }
 
     public String register(RegistrationRequest request) {
@@ -48,6 +51,10 @@ public class AuthenticationService {
                     .build();
 
             userService.save(user);
+
+            //creating a shopping cart for the user
+            shoppingCartService.createShoppingCart(user.getId());
+
 
             return "Successfully registration!";
     }

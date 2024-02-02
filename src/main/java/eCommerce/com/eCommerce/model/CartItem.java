@@ -27,4 +27,5 @@ CartItem {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
+
 }
