@@ -21,6 +21,8 @@ public class ShoppingCart {
     private Long id;
     @Column(nullable = false)
     private double totalPrice;
+    @Column(name = "total_items",nullable = false)
+    private Long totalItems;
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @OneToOne
