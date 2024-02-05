@@ -108,6 +108,15 @@ public class ProductServiceImpl implements ProductService {
     public String updateProductQuantity(Long id, UpdateQuantityRequest updateQuantityRequest) {
         var product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
         product.setQuantity(updateQuantityRequest.getQuantity());
+        //updating the quantity status of the product
+        String quantityStatus = null;
+        if(product.getQuantity() <= 10){
+            quantityStatus = "RUNNING LOW - Less than 10 available";
+        }
+        if(product.getQuantity() <= 20 && product.getQuantity() > 10){
+            quantityStatus = "HURRY UP - Selling out fast!";
+        }
+        product.setQuantityStatus(quantityStatus);
         productRepository.save(product);
         return "Product quantity updated successfully!";
     }
@@ -147,8 +156,8 @@ public class ProductServiceImpl implements ProductService {
                      .subcategoryName(product.getSubcategory().getName())
                      .categoryName(product.getSubcategory().getCategory().getName())
                      .reviews(productReviews)
-                      .price(product.getPrice())
-                      .quantityStatus(product.getQuantityStatus())
+                     .price(product.getPrice())
+                     .quantityStatus(product.getQuantityStatus())
                      .rating(product.getRating())
                      .build();
        }
