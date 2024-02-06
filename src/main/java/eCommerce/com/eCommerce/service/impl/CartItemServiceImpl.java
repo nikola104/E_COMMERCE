@@ -3,6 +3,7 @@ package eCommerce.com.eCommerce.service.impl;
 import eCommerce.com.eCommerce.dto.CartItemDto;
 import eCommerce.com.eCommerce.dto.request.CartItemRequest;
 import eCommerce.com.eCommerce.dto.request.RemoveItemFromCartRequest;
+import eCommerce.com.eCommerce.exception.CartItemNotFoundException;
 import eCommerce.com.eCommerce.exception.ItemIsOutOfStockException;
 import eCommerce.com.eCommerce.exception.ShoppingCartNotFoundException;
 import eCommerce.com.eCommerce.model.CartItem;
@@ -14,8 +15,10 @@ import eCommerce.com.eCommerce.service.ProductService;
 import eCommerce.com.eCommerce.service.ShoppingCartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,6 +82,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .shoppingCart(shoppingCart)
                 .quantity(cartItemRequest.getQuantity())
                 .price(product.getPrice() * cartItemRequest.getQuantity())
+                .addedAt(LocalDateTime.now())
                 .build();
 
         //saving the cart item
@@ -142,14 +146,21 @@ public class CartItemServiceImpl implements CartItemService {
     public String removeItemFromCart(RemoveItemFromCartRequest request) {
         var shoppingCart = shoppingCartService.findShoppingCartByUserId(request.getUserId());
         List<CartItem> cartItems = cartItemRepository.findAllByShoppingCartId(shoppingCart.getId());
-
-        for(CartItem cartItem : cartItems){{
-            if(cartItem.getProduct().getId() == request.getProductId()){
-                updateShoppingCart(shoppingCart,cartItem);
-                returnQuantityOfTheStock(cartItem,request.getProductId());
+        if(cartItems.isEmpty()){
+            throw new CartItemNotFoundException("Your cart is empty!");
+        }
+            boolean isItemInCart = false;
+        for(CartItem cartItem : cartItems){
+            if(cartItem.getProduct().getId() == request.getProductId()) {
+                updateShoppingCart(shoppingCart, cartItem);
+                returnQuantityOfTheStock(cartItem, request.getProductId());
                 cartItemRepository.delete(cartItem);
+                isItemInCart = true;
             }
-        }}
+        }
+        if(!isItemInCart){
+            throw new CartItemNotFoundException("Item is not in the cart");
+        }
         return "Item removed from cart";
     }
 
@@ -195,6 +206,30 @@ public class CartItemServiceImpl implements CartItemService {
         product.setQuantityStatus(quantityStatus);
         productService.saveProduct(product);
 
+    }
+    // Method to remove expired items from the cart
+/*    @Scheduled(cron = "0 0 0 * * *") // Cron expression for midnight execution
+    public void checkIfItPassed7Days(){
+        List<CartItem> cartItems = cartItemRepository.findAll();
+        for(CartItem cartItem : cartItems){
+            if(cartItem.getAddedAt().plusDays(7).isBefore(LocalDateTime.now())){
+                updateShoppingCart(cartItem.getShoppingCart(),cartItem);
+                returnQuantityOfTheStock(cartItem, cartItem.getProduct().getId());
+                cartItemRepository.delete(cartItem);
+            }
+        }
+
+    }*/
+    @Scheduled(cron = "0 0 0 * * *") // Cron expression for midnight execution
+    public void checkIfItPassed7Days(){
+        LocalDateTime cutoffDate = LocalDateTime.now().minusDays(7);
+        List<CartItem> cartItems = cartItemRepository.findItemsCreatedSevenDaysBefore(cutoffDate);
+        for(CartItem cartItem : cartItems){
+            updateShoppingCart(cartItem.getShoppingCart(),cartItem);
+            returnQuantityOfTheStock(cartItem, cartItem.getProduct().getId());
+            cartItemRepository.delete(cartItem);
+        }
 
     }
+
 }

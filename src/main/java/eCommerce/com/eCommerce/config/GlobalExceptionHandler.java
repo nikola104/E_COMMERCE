@@ -93,6 +93,11 @@ public class GlobalExceptionHandler {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(CartItemNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleCartItemNotFoundException(CartItemNotFoundException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
 
 
 /*    @ExceptionHandler(Exception.class)
