@@ -3,6 +3,8 @@ package eCommerce.com.eCommerce.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,6 +21,8 @@ CartItem {
     private Long quantity;
     @Column
     private double price;
+    @Column(nullable = false, name = "added_at")
+    private LocalDateTime addedAt;
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;

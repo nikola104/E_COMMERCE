@@ -14,6 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/cart-item")
 public class CartItemController {
+
+    //todo: to add created_at column in database and to reserve a product for 7 days
+    //todo: to add update quantity in the cart
+
     private final CartItemService cartItemService;
 
     public CartItemController(CartItemService cartItemService) {
@@ -31,5 +35,6 @@ public class CartItemController {
     public ResponseEntity<List<CartItemDto>> getCartItemsByCartId(@PathVariable Long userId){
         return new ResponseEntity<>(cartItemService.getCartItemsByCartId(userId), HttpStatus.OK);
     }
+
 
 }
