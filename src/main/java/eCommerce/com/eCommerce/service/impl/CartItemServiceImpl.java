@@ -49,8 +49,6 @@ public class CartItemServiceImpl implements CartItemService {
             return "Item is already in the cart. Quantity updated.";
         }
 
-
-
         //checking if the product is out of stock and if a customer can buy it
         if(product.getQuantity() < cartItemRequest.getQuantity() && cartItemRequest.getQuantity() >= 2){
             throw new ItemIsOutOfStockException("Item is out of stock. Please consider trying with a lower quantity.");
