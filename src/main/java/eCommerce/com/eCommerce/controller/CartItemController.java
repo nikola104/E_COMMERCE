@@ -36,5 +36,8 @@ public class CartItemController {
         return new ResponseEntity<>(cartItemService.getCartItemsByCartId(userId), HttpStatus.OK);
     }
 
+    //@PatchMapping("/update-quantity/")
+    //todo: to think about secure thee endpoint
+
 
 }
