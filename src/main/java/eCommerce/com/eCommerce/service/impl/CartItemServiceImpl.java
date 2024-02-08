@@ -3,6 +3,7 @@ package eCommerce.com.eCommerce.service.impl;
 import eCommerce.com.eCommerce.dto.CartItemDto;
 import eCommerce.com.eCommerce.dto.request.CartItemRequest;
 import eCommerce.com.eCommerce.dto.request.RemoveItemFromCartRequest;
+import eCommerce.com.eCommerce.dto.request.UpdateItemInTheCartRequest;
 import eCommerce.com.eCommerce.exception.CartItemNotFoundException;
 import eCommerce.com.eCommerce.exception.ItemIsOutOfStockException;
 import eCommerce.com.eCommerce.exception.ShoppingCartNotFoundException;
@@ -53,6 +54,7 @@ public class CartItemServiceImpl implements CartItemService {
         if(product.getQuantity() < cartItemRequest.getQuantity() && cartItemRequest.getQuantity() >= 2){
             throw new ItemIsOutOfStockException("Item is out of stock. Please consider trying with a lower quantity.");
         }
+        //checking if customer want to buy a single item and the product is out of stock
         if(product.getQuantity() < cartItemRequest.getQuantity() && cartItemRequest.getQuantity() == 1 ){
             throw new ItemIsOutOfStockException("Item is out of stock");
         }
@@ -62,17 +64,7 @@ public class CartItemServiceImpl implements CartItemService {
         product.setQuantity(product.getQuantity() - cartItemRequest.getQuantity());
 
         //checking the quantity status of the product
-        String quantityStatus = null;
-
-        if(product.getQuantity() <= 10){
-            quantityStatus = "RUNNING LOW - Less than 10 available";
-        }
-        if(product.getQuantity() <= 20 && product.getQuantity() > 10){
-            quantityStatus = "HURRY UP - Selling out fast!";
-        }
-        product.setQuantityStatus(quantityStatus);
-
-        productService.saveProduct(product);
+        updateQuantityStatusOfTheProduct(product);
 
         //creating a new cart item
         var cartItem = CartItem.builder()
@@ -184,6 +176,81 @@ public class CartItemServiceImpl implements CartItemService {
 
     }
 
+
+    @Override
+    public String updateQuantityInTheCart(UpdateItemInTheCartRequest request) {
+        var cart = shoppingCartService.findShoppingCartByUserId(request.getUserId());
+        var cartItem = cartItemRepository.findByShoppingCartIdAndProductId(cart.getId(), request.getProductId())
+                .orElseThrow(() -> new CartItemNotFoundException("Item not found in the cart"));
+        var product = productService.findProductById(request.getProductId());
+        String returnString = "The item has been updated successfully!";
+
+        if(request.getQuantity() > cartItem.getQuantity()){
+            updateQuantitiesAndPricesIfQuantityIsGreaterThanThePreviousOne(cartItem, request, cart, product);
+        }
+
+        if(request.getQuantity() < cartItem.getQuantity()) {
+            updateQuantitiesAndPricesIfQuantityIsLessThanThePreviousOne(cartItem, request, cart, product);
+        }
+
+        if(request.getQuantity() == 0){
+            removeItemFromCart(new RemoveItemFromCartRequest(request.getUserId(), request.getProductId()));
+            returnString = "Item removed from cart";
+        }
+
+        return returnString;
+    }
+
+    private void updateQuantitiesAndPricesIfQuantityIsLessThanThePreviousOne(CartItem cartItem, UpdateItemInTheCartRequest request, ShoppingCart cart, Product product) {
+        //quantity to remove
+        Long quantityToRemove = cartItem.getQuantity() - request.getQuantity();
+
+        //updating the quantity of the product
+        product.setQuantity(product.getQuantity() + quantityToRemove);
+        //updating the quantity status of the product
+        updateQuantityStatusOfTheProduct(product);
+
+        //updating the quantity of the cart item
+        cartItem.setQuantity(request.getQuantity());
+        //updating the price of the cart item
+        cartItem.setPrice(product.getPrice() * request.getQuantity());
+        cartItemRepository.save(cartItem);
+        //updating the shopping cart total price
+        cart.setTotalPrice(cart.getTotalPrice() - (product.getPrice() * quantityToRemove));
+        //update the shopping cart total quantity
+        cart.setTotalItems(cart.getTotalItems() - quantityToRemove);
+        shoppingCartService.saveShoppingCart(cart);
+    }
+
+    void updateQuantitiesAndPricesIfQuantityIsGreaterThanThePreviousOne(CartItem cartItem, UpdateItemInTheCartRequest request, ShoppingCart cart, Product product){
+        //quantity to add
+        Long quantityToAdd = request.getQuantity() - cartItem.getQuantity();
+        //checking if the product is out of stock and if a customer can buy it
+        if(product.getQuantity() < quantityToAdd){
+            throw new ItemIsOutOfStockException("Item is out of stock. Please consider trying with a lower quantity.");
+        }
+        //checking if customer want to buy a single item and the product is out of stock
+        if(product.getQuantity() < quantityToAdd && quantityToAdd == 1 ){
+            throw new ItemIsOutOfStockException("Item is out of stock");
+        }
+
+        //updating the quantity of the product temporarily
+        product.setQuantity(product.getQuantity() - quantityToAdd);
+        //updating the quantity status of the product
+        updateQuantityStatusOfTheProduct(product);
+
+        //updating the quantity of the cart item
+        cartItem.setQuantity(cartItem.getQuantity() + quantityToAdd);
+        //updating the price of the cart item
+        cartItem.setPrice(cartItem.getPrice() + (product.getPrice() * quantityToAdd));
+        cartItemRepository.save(cartItem);
+        //updating the shopping cart total price
+        cart.setTotalPrice(cart.getTotalPrice() + (product.getPrice() * quantityToAdd));
+        //update the shopping cart total quantity
+        cart.setTotalItems(cart.getTotalItems() + quantityToAdd);
+        shoppingCartService.saveShoppingCart(cart);
+    }
+
     void updateShoppingCart(ShoppingCart cart, CartItem cartItem){
         cart.setTotalPrice(cart.getTotalPrice()-cartItem.getPrice());
         cart.setTotalItems(cart.getTotalItems()-cartItem.getQuantity());
@@ -194,15 +261,7 @@ public class CartItemServiceImpl implements CartItemService {
         product.setQuantity(product.getQuantity()+cartItem.getQuantity());
 
         //updating the quantity status of the product
-        String quantityStatus = null;
-        if(product.getQuantity() <= 10){
-            quantityStatus = "RUNNING LOW - Less than 10 available";
-        }
-        if(product.getQuantity() <= 20 && product.getQuantity() > 10){
-            quantityStatus = "HURRY UP - Selling out fast!";
-        }
-        product.setQuantityStatus(quantityStatus);
-        productService.saveProduct(product);
+        updateQuantityStatusOfTheProduct(product);
 
     }
     // Method to remove expired items from the cart

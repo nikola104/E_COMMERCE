@@ -30,6 +30,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .totalPrice(0)
+                .totalItems(0L)
                 .build();
 
         shoppingCartRepository.save(shoppingCart);

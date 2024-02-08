@@ -19,4 +19,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     @Query("SELECT c FROM CartItem c WHERE c.addedAt <= :cutoffDate")
     List<CartItem> findItemsCreatedSevenDaysBefore(LocalDateTime cutoffDate);
 
+    Optional<CartItem> findByShoppingCartIdAndProductId(Long id, Long productId);
 }

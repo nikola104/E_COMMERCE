@@ -18,6 +18,8 @@ import java.util.Optional;
 public class ProductController {
     private final ProductService productService;
 
+    //todo: to show only the products that are available
+    // todo: to add quantity status when adding product
 
     public ProductController(ProductService productService) {
         this.productService = productService;
