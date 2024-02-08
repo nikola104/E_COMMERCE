@@ -1,6 +1,7 @@
 package eCommerce.com.eCommerce.service;
 
 import eCommerce.com.eCommerce.dto.response.ShoppingCartResponse;
+import eCommerce.com.eCommerce.model.CartItem;
 import eCommerce.com.eCommerce.model.ShoppingCart;
 
 public interface ShoppingCartService {
@@ -10,4 +11,7 @@ public interface ShoppingCartService {
     ShoppingCart findShoppingCartByUserId(Long shoppingCartId);
 
     ShoppingCartResponse getCart(Long userId);
+
+
+
 }
