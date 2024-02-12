@@ -4,8 +4,12 @@ import eCommerce.com.eCommerce.dto.response.ShoppingCartResponse;
 import eCommerce.com.eCommerce.exception.ShoppingCartNotFoundException;
 import eCommerce.com.eCommerce.model.ShoppingCart;
 import eCommerce.com.eCommerce.repository.ShoppingCartRepository;
+import eCommerce.com.eCommerce.service.ProductService;
 import eCommerce.com.eCommerce.service.ShoppingCartService;
 import eCommerce.com.eCommerce.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +19,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final UserService userService;
     private final ShoppingCartRepository shoppingCartRepository;
+    private final static Logger LOGGER = LoggerFactory.getLogger(ShoppingCartServiceImpl.class);
+
+/*
+    @Value("${stripe.apikey}")
+    String stripeKey;
+*/
 
     public ShoppingCartServiceImpl(UserService userService, ShoppingCartRepository shoppingCartRepository) {
         this.userService = userService;

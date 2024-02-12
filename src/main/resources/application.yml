@@ -18,6 +18,9 @@ spring:
     baseline-description: "init"
     baseline-version: 0
 
+stripe:
+  apikey: sk_test_51Oj0jtAVTavn1EBqfnDgyw09Psdadr4fDbc5Rw1JIUBPoNNqapKYFaKvPwJX4DbRVGJkpA7PndVAjcbdeYYD3D7e00OcMhRd00
+
 
 
 server:

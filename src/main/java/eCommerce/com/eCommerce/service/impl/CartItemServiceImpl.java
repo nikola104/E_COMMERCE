@@ -72,6 +72,8 @@ public class CartItemServiceImpl implements CartItemService {
                 .shoppingCart(shoppingCart)
                 .quantity(cartItemRequest.getQuantity())
                 .price(product.getPrice() * cartItemRequest.getQuantity())
+                .singlePrice(product.getPrice())
+                .imageData(product.getImageData())
                 .addedAt(LocalDateTime.now())
                 .build();
 
