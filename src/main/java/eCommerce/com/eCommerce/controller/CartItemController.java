@@ -16,10 +16,6 @@ import java.util.List;
 @RequestMapping("api/v1/cart-item")
 public class CartItemController {
 
-
-    //todo: to add byte[] image to the product
-    //todo: to add the price for one product
-
     private final CartItemService cartItemService;
 
     public CartItemController(CartItemService cartItemService) {
