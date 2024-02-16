@@ -1,5 +1,5 @@
 body {
-    background-image: url('images/login_pg.webp');
+    background-image: url('../../assets/images/bckg.jpg');
     background-size: cover; /* Cover the entire viewport */
     background-position: center center; /* Center the image horizontally and vertically */
     background-attachment: fixed; /* Fixed background image */
