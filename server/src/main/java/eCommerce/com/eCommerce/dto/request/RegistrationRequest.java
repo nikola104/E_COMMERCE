@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 public class RegistrationRequest {
     @NotBlank(message = "Invalid First Name: Empty First name")
     @NotNull(message = "Invalid Fist Name: First Name is NULL")
-    @Size(min = 3, max = 18, message = "Invalid Name: Exceeds 18 characters")
+    @Size(min = 3, max = 18, message = "The First Name must be between 3 and 18 characters long!")
     private String firstName;
     @NotBlank(message = "Invalid Last Name: Empty Last name")
     @NotNull(message = "Invalid Last Name: Last Name is NULL")
-    @Size(min = 3, max = 18, message = "Invalid Name: Exceeds 18 characters")
+    @Size(min = 3, max = 18, message = "The Last Name must be between 3 and 18 characters long!")
     private String lastName;
     @Email(message = "Invalid Email")
     private String email;
