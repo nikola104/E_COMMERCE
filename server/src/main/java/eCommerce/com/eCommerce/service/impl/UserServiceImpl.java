@@ -1,6 +1,7 @@
 package eCommerce.com.eCommerce.service.impl;
 
 import eCommerce.com.eCommerce.dto.UserInfoDto;
+import eCommerce.com.eCommerce.exception.InvalidCredentialsException;
 import eCommerce.com.eCommerce.exception.UserNotFoundException;
 import eCommerce.com.eCommerce.model.User;
 import eCommerce.com.eCommerce.model.UserAddress;
@@ -31,6 +32,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found!"));
+    }
+
+    @Override
+    public void existsByEmail(String email) {
+        if(userRepository.existsByEmail(email)){
+            throw new InvalidCredentialsException("The email is already taken!");
+        }
     }
 
     @Override
