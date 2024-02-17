@@ -69,6 +69,11 @@ public class GlobalExceptionHandler {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, List<String>>> handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleReviewNotFoundException(ReviewNotFoundException ex) {
@@ -100,7 +105,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
+/*    @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +115,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 
     //returning a map of errors
     private Map<String,List<String>> getErrorsMap(List<String> errors) {

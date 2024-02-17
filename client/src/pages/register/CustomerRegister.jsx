@@ -20,15 +20,26 @@ const CustomerRegister = () => {
     })
 
     let navigate = useNavigate();
-    const [duplicateUsernameOrEmailMessage, setDuplicateUsernameOrEmailMessage] = useState(null);
     
-    const [errors, setErrors] = useState({});
+    
+
+
+    const [inputErrors, setInputErrors] = useState({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    });
     
     const handleChange = (e) => {
       const value = e.target.value;
       setUser({...user,[e.target.name]: value})
-      setErrors({}); // Clear all errors when input changes
+      setInputErrors({}); // Clear all errors when input changes
+
   }
+
+
 
 
 
@@ -41,9 +52,28 @@ const CustomerRegister = () => {
             navigate("/login");
         })  
         .catch((error) => {
-            if (error.response && error.response.status === 400) {
-              setErrors(error.response.data); // Set validation errors from backend response
-            }
+          console.log(error.response.data.errors);
+          const errorMessage = error.response.data.errors[error.response.data.errors.length - 1];
+          console.log(errorMessage);
+          if(errorMessage === "The First Name must be between 3 and 18 characters long!"){
+            setInputErrors({ ...inputErrors, firstName: 'The first name must be between 3 and 18 characters long!' });
+            setUser(prevUser => ({ ...prevUser, firstName: '' })); 
+          }
+          else if(errorMessage === "The Last Name must be between 3 and 18 characters long!"){
+            setInputErrors({ ...inputErrors, lastName: 'The last name must be between 3 and 18 characters long!' });
+            setUser(prevUser => ({ ...prevUser, lastName: '' })); 
+          }else if(errorMessage === "The password must be at least 8 characters long!"){
+            setInputErrors({ ...inputErrors, password: 'The password must be at least 8 characters long!' });
+            setUser(prevUser => ({ ...prevUser, password: '' }));
+          }else if(errorMessage === "The email is already taken!"){
+            setInputErrors({ ...inputErrors, email: 'The email is already taken!' });
+            setUser(prevUser => ({ ...prevUser, email: '' }));
+          }else if(errorMessage === "Password does not match!"){
+            setInputErrors({ ...inputErrors, confirmPassword: 'Password does not match!' });
+            setUser(prevUser => ({ ...prevUser, confirmPassword: '' }));
+          }
+
+
         });     
     }
 
@@ -68,14 +98,19 @@ const CustomerRegister = () => {
                         <div className="form-floating mb-3">
                              <input required
                              name="firstName" value={user.firstName} onChange={(e)=> handleChange(e)}
-                             type="text" className="form-control bg-white text-dark" id="floatingUsername" placeholder="First Name"/>
+                             type="text" className="form-control bg-white text-dark" id="floatingUsername" placeholder="First Name"/>                 
                              <label htmlFor="floatingUsername">First Name</label>
+                             <span className="error-message" style={{color: 'red',   animationDelay: `0.5s`}}  ><br/>{inputErrors.firstName}</span>
+                             
+                                               
                         </div>
+                        
                         <div className="form-floating mb-3">
                              <input required
                              name="lastName" value={user.lastName} onChange={(e)=> handleChange(e)}
                              type="text" className="form-control bg-white text-dark" id="floatingUsername" placeholder="Last Name"/>
                              <label htmlFor="floatingUsername">Last Name</label>
+                             <span className="error-message" style={{color: 'red',   animationDelay: ` 0.5`}}  ><br/>{inputErrors.lastName}</span>
                         </div>
                       
 
@@ -84,6 +119,7 @@ const CustomerRegister = () => {
                          name="email" value={user.email} onChange={(e) => handleChange(e)}
                         className="form-control bg-white fg-black text-dark" id="floatingInput" placeholder="name@example.com"/>
                         <label  htmlFor="floatingInput">Email</label>
+                        <span className="error-message" style={{color: 'red',   animationDelay: `0.5s`}}  ><br/>{inputErrors.email}</span>
                             <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                          </div>  
 
@@ -92,8 +128,10 @@ const CustomerRegister = () => {
                       name="password" value={user.password} onChange={(e) => handleChange(e)}
                       className="form-control bg-white text-dark" id="floatingPassord" placeholder="Password"/>
                              <label htmlFor="floatingPassord">Password</label>
+    
                              <div id="passwordHelpBlock" className="form-text">
-                             Your password must be 8-20 characters long, contain letters and numbers.
+                             <span className="error-message" style={{color: 'red',   animationDelay: `0.5s`}}  ><br/>{inputErrors.password}</span>
+                             The password must be at least 8 characters long.
                             </div>  
                         </div>
 
@@ -106,6 +144,7 @@ const CustomerRegister = () => {
                         onChange={(e)=> handleChange(e)}
                         className="form-control bg-white text-dark" id="floatingConfirmPassword" placeholder="ConfirmPassword"/>
                              <label htmlFor="floatingConfirmPassword">Confirm Password</label> 
+                             <span className="error-message" style={{color: 'red',   animationDelay:`0.5s`}}  ><br/>{inputErrors.confirmPassword}</span>
                         </div>
                     
 
@@ -120,12 +159,9 @@ const CustomerRegister = () => {
                       </div>
 
                     </form>
-                      <div>
-                        {Object.keys(errors).map((fieldName, index) => (
-                          <span key={index} className="error">{errors[fieldName]}</span>
-                        ))}
-                      </div>
-                    {duplicateUsernameOrEmailMessage && <p style={{ color: 'red' }}>{duplicateUsernameOrEmailMessage}</p>}
+                
+                     
+                
 
                   </div>
                   <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">

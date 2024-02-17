@@ -4,12 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eCommerce.com.eCommerce.dto.request.AuthenticationRequest;
 import eCommerce.com.eCommerce.dto.request.RegistrationRequest;
 import eCommerce.com.eCommerce.dto.response.AuthenticationResponse;
+import eCommerce.com.eCommerce.exception.InvalidCredentialsException;
 import eCommerce.com.eCommerce.model.User;
 import eCommerce.com.eCommerce.service.ShoppingCartService;
 import eCommerce.com.eCommerce.service.UserService;
+import eCommerce.com.eCommerce.service.impl.CartItemServiceImpl;
 import eCommerce.com.eCommerce.service.impl.JWTServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +30,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final ShoppingCartService shoppingCartService;
+    private final static Logger LOGGER = LoggerFactory.
+            getLogger(AuthenticationService.class);
 
     public AuthenticationService(UserService userService, JWTServiceImpl jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, ShoppingCartService shoppingCartService) {
         this.userService = userService;
@@ -36,10 +42,19 @@ public class AuthenticationService {
     }
 
     public String register(RegistrationRequest request) {
+        //check if email exists
+        userService.existsByEmail(request.getEmail());
+
+
+        //password does not match
         if(!(request.getPassword().equals(request.getConfirmPassword()))){
-            //password does not match
-            throw new BadCredentialsException("The password does not match!");
+            LOGGER.info("Password does not match!");
+            throw new InvalidCredentialsException("Password does not match!");
+
         }
+
+
+
             var user = User.builder()
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
@@ -80,7 +95,7 @@ public class AuthenticationService {
 
         }catch (BadCredentialsException e){
 
-            throw new BadCredentialsException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
     }

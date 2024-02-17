@@ -119,3 +119,18 @@ input[type="submit"]:hover {
 .input-container a:hover {
     color: #000000f6;
 }
+.error-message {
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  

@@ -29,7 +29,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final ProductService productService;
     private final CartItemRepository cartItemRepository;
     private final static Logger LOGGER = LoggerFactory.
-            getLogger(ProductService.class);
+            getLogger(CartItemServiceImpl.class);
 
 
 
