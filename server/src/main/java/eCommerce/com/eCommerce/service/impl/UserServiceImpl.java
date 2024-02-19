@@ -8,6 +8,7 @@ import eCommerce.com.eCommerce.model.UserAddress;
 import eCommerce.com.eCommerce.repository.UserRepository;
 import eCommerce.com.eCommerce.service.UserAddressService;
 import eCommerce.com.eCommerce.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,5 +78,16 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found!"));
         userRepository.deleteById(user.getId());
         return "User deleted successfully!";
+    }
+
+    @Override
+    public Long getUserIdByEmail(String email) {
+        return userRepository.findUserIdByEmail(email).orElseThrow(() -> new UserNotFoundException("User with email: "+email +" not found!"));
+    }
+
+    @Override
+    public Long findUserIdByAuthentication(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return user.getId();
     }
 }

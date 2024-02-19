@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateItemInTheCartRequest {
-    @NotNull(message = "cartItemId is required")
-    private Long userId;
     @NotNull(message = "productId is required")
     private Long productId;
     @Min(value = 0, message = "Quantity must be a positive number")
