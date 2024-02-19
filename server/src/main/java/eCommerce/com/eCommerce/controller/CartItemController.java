@@ -8,6 +8,8 @@ import eCommerce.com.eCommerce.service.CartItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,21 +24,22 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
     @PostMapping("/save-item-to-cart")
-    public ResponseEntity<String> saveItemToCart(@RequestBody @Valid CartItemRequest cartItemRequest){
-        return new ResponseEntity<>(cartItemService.saveItemToCart(cartItemRequest), HttpStatus.CREATED);
+    public ResponseEntity<String> saveItemToCart(@RequestBody @Valid CartItemRequest cartItemRequest, Authentication authentication){
+        return new ResponseEntity<>(cartItemService.saveItemToCart(cartItemRequest,authentication), HttpStatus.CREATED);
     }
     @DeleteMapping("/remove-item-from-cart")
-    public ResponseEntity<String> removeItemFromCart(@RequestBody @Valid RemoveItemFromCartRequest request){
-        return new ResponseEntity<>(cartItemService.removeItemFromCart(request), HttpStatus.OK);
+    public ResponseEntity<String> removeItemFromCart(@RequestBody @Valid RemoveItemFromCartRequest request, Authentication authentication){
+        return new ResponseEntity<>(cartItemService.removeItemFromCart(request,authentication), HttpStatus.OK);
     }
-    @GetMapping("/get-items-by-user-id/{userId}")
-    public ResponseEntity<List<CartItemDto>> getCartItemsByCartId(@PathVariable Long userId){
-        return new ResponseEntity<>(cartItemService.getCartItemsByCartId(userId), HttpStatus.OK);
+
+    @GetMapping("/cart-items")
+    public ResponseEntity<List<CartItemDto>> getCartItemsByCartId(Authentication authentication){
+        return new ResponseEntity<>(cartItemService.getCartItemsByCartId(authentication), HttpStatus.OK);
     }
 
     @PatchMapping("/update-quantity-in-the-cart")
-    public ResponseEntity<String> updateQuantityInTheCart(@RequestBody @Valid UpdateItemInTheCartRequest request){
-        return new ResponseEntity<>(cartItemService.updateQuantityInTheCart(request),HttpStatus.OK);
+    public ResponseEntity<String> updateQuantityInTheCart(@RequestBody @Valid UpdateItemInTheCartRequest request, Authentication authentication){
+        return new ResponseEntity<>(cartItemService.updateQuantityInTheCart(request,authentication),HttpStatus.OK);
     }
     //todo: to think about secure thee endpoint
 

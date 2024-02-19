@@ -1,11 +1,13 @@
 package eCommerce.com.eCommerce.service.impl;
 
 import eCommerce.com.eCommerce.service.JWTService;
+import eCommerce.com.eCommerce.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JWTServiceImpl implements JWTService {
 
     @Value("${application.security.jwt.secret-key}")
@@ -25,6 +28,7 @@ public class JWTServiceImpl implements JWTService {
     private long jwtExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
+    private final UserService userService;
     /**
      * @param userDetails- the user details
      * @return the token
@@ -38,6 +42,7 @@ public class JWTServiceImpl implements JWTService {
      * @return the token
      */
     public String generateToken(Map<String,Object> extraClaims,UserDetails userDetails) {
+        extraClaims.put("id",userService.findByEmail(userDetails.getUsername()).getId());
         return buildToken(extraClaims,userDetails,jwtExpiration);
     }
     /**

@@ -14,9 +14,12 @@ import eCommerce.com.eCommerce.repository.CartItemRepository;
 import eCommerce.com.eCommerce.service.CartItemService;
 import eCommerce.com.eCommerce.service.ProductService;
 import eCommerce.com.eCommerce.service.ShoppingCartService;
+
+import eCommerce.com.eCommerce.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,21 +31,25 @@ public class CartItemServiceImpl implements CartItemService {
     private final ShoppingCartService shoppingCartService;
     private final ProductService productService;
     private final CartItemRepository cartItemRepository;
+
+    private final UserService userService;
     private final static Logger LOGGER = LoggerFactory.
             getLogger(CartItemServiceImpl.class);
 
 
 
-    public CartItemServiceImpl(ShoppingCartService shoppingCartService, ProductService productService, CartItemRepository cartItemRepository) {
+    public CartItemServiceImpl(ShoppingCartService shoppingCartService, ProductService productService, CartItemRepository cartItemRepository, UserService userService) {
         this.shoppingCartService = shoppingCartService;
         this.productService = productService;
         this.cartItemRepository = cartItemRepository;
+        this.userService = userService;
     }
 
     @Override
-    public String saveItemToCart(CartItemRequest cartItemRequest) {
+    public String saveItemToCart(CartItemRequest cartItemRequest, Authentication authentication) {
+        Long userId = userService.findUserIdByAuthentication(authentication);
         var product = productService.findProductById(cartItemRequest.getProductId());
-        var shoppingCart = shoppingCartService.findShoppingCartByUserId(cartItemRequest.getUserId());
+        var shoppingCart = shoppingCartService.findShoppingCartByUserId(userId);
         var cartItems = cartItemRepository.findAllByShoppingCartId(shoppingCart.getId());
 
         //checking if the product is already in the cart
@@ -86,6 +93,7 @@ public class CartItemServiceImpl implements CartItemService {
         shoppingCart.setTotalItems(shoppingCart.getTotalItems() + cartItemRequest.getQuantity());
         //update the shopping cart
         shoppingCartService.saveShoppingCart(shoppingCart);
+        LOGGER.info("Item added to cart {}",cartItem);
 
         return "Item added to cart";
         
@@ -116,6 +124,8 @@ public class CartItemServiceImpl implements CartItemService {
                 shoppingCart.setTotalItems(shoppingCart.getTotalItems() + cartItemRequest.getQuantity());
                 shoppingCartService.saveShoppingCart(shoppingCart);
 
+
+
             }
         }
         return isDuplicate;
@@ -135,8 +145,10 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public String removeItemFromCart(RemoveItemFromCartRequest request) {
-        var shoppingCart = shoppingCartService.findShoppingCartByUserId(request.getUserId());
+    public String removeItemFromCart(RemoveItemFromCartRequest request, Authentication authentication) {
+        Long userId = userService.findUserIdByAuthentication(authentication);
+
+        var shoppingCart = shoppingCartService.findShoppingCartByUserId(userId);
         List<CartItem> cartItems = cartItemRepository.findAllByShoppingCartId(shoppingCart.getId());
         if(cartItems.isEmpty()){
             throw new CartItemNotFoundException("Your cart is empty!");
@@ -153,11 +165,13 @@ public class CartItemServiceImpl implements CartItemService {
         if(!isItemInCart){
             throw new CartItemNotFoundException("Item is not in the cart");
         }
+        LOGGER.info("Item removed from cart {}",request.getProductId());
         return "Item removed from cart";
     }
 
     @Override
-    public List<CartItemDto> getCartItemsByCartId(Long userId) {
+    public List<CartItemDto> getCartItemsByCartId(Authentication authentication) {
+        Long userId = userService.findUserIdByAuthentication(authentication);
         var shoppingCartId = shoppingCartService.findShoppingCartByUserId(userId).getId();
         var shoppingCart = cartItemRepository.findAllByShoppingCartId(shoppingCartId);
         if(shoppingCart.isEmpty()){
@@ -180,8 +194,9 @@ public class CartItemServiceImpl implements CartItemService {
 
 
     @Override
-    public String updateQuantityInTheCart(UpdateItemInTheCartRequest request) {
-        var cart = shoppingCartService.findShoppingCartByUserId(request.getUserId());
+    public String updateQuantityInTheCart(UpdateItemInTheCartRequest request, Authentication authentication) {
+        Long userId = userService.findUserIdByAuthentication(authentication);
+        var cart = shoppingCartService.findShoppingCartByUserId(userId);
         var cartItem = cartItemRepository.findByShoppingCartIdAndProductId(cart.getId(), request.getProductId())
                 .orElseThrow(() -> new CartItemNotFoundException("Item not found in the cart"));
         var product = productService.findProductById(request.getProductId());
@@ -196,9 +211,10 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         if(request.getQuantity() == 0){
-            removeItemFromCart(new RemoveItemFromCartRequest(request.getUserId(), request.getProductId()));
+            removeItemFromCart(new RemoveItemFromCartRequest(request.getProductId()), authentication);
             returnString = "Item removed from cart";
         }
+        LOGGER.info("Item updated in the cart {}",cartItem);
 
         return returnString;
     }
@@ -287,8 +303,8 @@ public class CartItemServiceImpl implements CartItemService {
             updateShoppingCart(cartItem.getShoppingCart(),cartItem);
             returnQuantityOfTheStock(cartItem, cartItem.getProduct().getId());
             cartItemRepository.delete(cartItem);
+            LOGGER.info("Item removed from cart with cronJobs {}",cartItem);
         }
-
     }
 
 }

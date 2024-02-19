@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 public class CartItemRequest {
     @NotNull(message = "Product id cannot be null")
     private Long productId;
-    @NotNull(message = "User id cannot be null")
-    private Long userId;
     @NotNull(message = "Quantity cannot be null")
     private Long quantity;
 }
