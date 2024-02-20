@@ -80,7 +80,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .quantity(cartItemRequest.getQuantity())
                 .price(product.getPrice() * cartItemRequest.getQuantity())
                 .singlePrice(product.getPrice())
-                .imageData(product.getImageData())
+                // TODO: 2/20/2024  add image path
                 .addedAt(LocalDateTime.now())
                 .build();
 
@@ -181,7 +181,7 @@ public class CartItemServiceImpl implements CartItemService {
                .map(cartItem -> CartItemDto.builder()
                        .productName(cartItem.getProduct().getProductName())
                        .quantity(cartItem.getQuantity())
-                       .productImage(cartItem.getProduct().getImageData())
+                       // TODO: 2/20/2024  add image path
                        .totalPrice(cartItem.getPrice())
                        .productPrice(cartItem.getProduct().getPrice())
                           .build())

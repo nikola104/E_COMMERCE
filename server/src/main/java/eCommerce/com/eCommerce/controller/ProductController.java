@@ -5,7 +5,9 @@ import eCommerce.com.eCommerce.dto.ProductDto;
 import eCommerce.com.eCommerce.dto.request.UpdateQuantityRequest;
 import eCommerce.com.eCommerce.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductService productService;
+
 
     //todo: to show only the products that are available
     // todo: to add quantity status when adding product
@@ -32,8 +35,10 @@ public class ProductController {
 
     }
     @GetMapping("/get-product-by-id/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
-        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) throws IOException {
+
+       return new ResponseEntity<>(productService.getProductById(id) ,HttpStatus.OK);
+
     }
     @PatchMapping("/update-product-quantity/{id}")
     public ResponseEntity<String> updateProductQuantity(@PathVariable Long id, @RequestBody UpdateQuantityRequest updateQuantityRequest){
