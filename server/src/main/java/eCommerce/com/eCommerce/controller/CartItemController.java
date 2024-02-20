@@ -41,7 +41,7 @@ public class CartItemController {
     public ResponseEntity<String> updateQuantityInTheCart(@RequestBody @Valid UpdateItemInTheCartRequest request, Authentication authentication){
         return new ResponseEntity<>(cartItemService.updateQuantityInTheCart(request,authentication),HttpStatus.OK);
     }
-    //todo: to think about secure thee endpoint
+
 
 
 }

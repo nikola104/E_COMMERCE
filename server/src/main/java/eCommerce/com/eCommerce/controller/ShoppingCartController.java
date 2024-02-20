@@ -4,8 +4,8 @@ import eCommerce.com.eCommerce.dto.response.ShoppingCartResponse;
 import eCommerce.com.eCommerce.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +20,8 @@ public class ShoppingCartController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @GetMapping("/get-cart/{userId}")
-    public ResponseEntity<ShoppingCartResponse> getCart(@PathVariable Long userId){
-        return new ResponseEntity<>(shoppingCartService.getCart(userId), HttpStatus.OK);
+    @GetMapping("/get-cart")
+    public ResponseEntity<ShoppingCartResponse> getCart(Authentication authentication){
+        return new ResponseEntity<>(shoppingCartService.getCart(authentication), HttpStatus.OK);
     }
 }

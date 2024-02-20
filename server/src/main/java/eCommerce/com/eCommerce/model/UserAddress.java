@@ -1,11 +1,8 @@
 package eCommerce.com.eCommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -30,8 +27,8 @@ public class UserAddress {
     @Column(nullable = false)
     private String phoneNumber;
 
-
-    @OneToOne(cascade = CascadeType.MERGE,optional = false)
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.PERSIST,optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

@@ -7,6 +7,7 @@ import eCommerce.com.eCommerce.service.UserAddressService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,22 +20,22 @@ public class UserAddressController {
     }
 
     @PostMapping("/save-user-address")
-    public ResponseEntity<UserAddress> saveUserAddress(@RequestBody @Valid UserAddressRequest userAddressRequest){
+    public ResponseEntity<UserAddress> saveUserAddress(@RequestBody @Valid UserAddressRequest userAddressRequest, Authentication authentication){
 
-        return new ResponseEntity<>(userAddressService.saveUserAddress(userAddressRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(userAddressService.saveUserAddress(userAddressRequest, authentication), HttpStatus.CREATED);
     }
 
-   @GetMapping("/get-user-address/{id}")
-    public ResponseEntity<UserAddressDto> getUserAddress(@PathVariable Long id){
-        return new ResponseEntity<>(userAddressService.getUserAddress(id), HttpStatus.OK);
+   @GetMapping("/get-user-address")
+    public ResponseEntity<UserAddressDto> getUserAddress(Authentication authentication){
+        return new ResponseEntity<>(userAddressService.getUserAddress(authentication), HttpStatus.OK);
     }
-    @DeleteMapping("/delete-user-address/{id}")
-    public ResponseEntity<String> deleteUserAddress(@PathVariable Long id){
-        return new ResponseEntity<>(userAddressService.deleteUserAddress(id), HttpStatus.OK);
+    @DeleteMapping("/delete-user-address")
+    public ResponseEntity<String> deleteUserAddress(Authentication authentication){
+        return new ResponseEntity<>(userAddressService.deleteUserAddress(authentication), HttpStatus.OK);
     }
-    @PutMapping("/update-user-address/{id}")
-    public ResponseEntity<String> updateUserAddress(@PathVariable Long id, @RequestBody @Valid UserAddressRequest userAddressRequest){
-        return new ResponseEntity<>(userAddressService.updateUserAddress(id, userAddressRequest), HttpStatus.OK);
+    @PutMapping("/update-user-address")
+    public ResponseEntity<String> updateUserAddress(@RequestBody @Valid UserAddressRequest userAddressRequest, Authentication authentication){
+        return new ResponseEntity<>(userAddressService.updateUserAddress(userAddressRequest, authentication), HttpStatus.OK);
     }
 
 

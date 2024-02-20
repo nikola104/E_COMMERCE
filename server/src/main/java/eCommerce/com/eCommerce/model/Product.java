@@ -40,9 +40,8 @@ public class Product {
     private String quantityStatus;
     @Column(nullable = false)
     private Double price;
-    @Lob
-    @Column(columnDefinition = "LONGBLOB",nullable = true)
-    private byte[] imageData;
+    @Column(name = "image_path",nullable = true)
+    private String imagePath;
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @ManyToOne

@@ -20,4 +20,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     List<CartItem> findItemsCreatedSevenDaysBefore(LocalDateTime cutoffDate);
 
     Optional<CartItem> findByShoppingCartIdAndProductId(Long id, Long productId);
+
+
 }

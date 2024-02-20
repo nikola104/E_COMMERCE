@@ -4,6 +4,7 @@ import eCommerce.com.eCommerce.dto.CartItemDto;
 import eCommerce.com.eCommerce.dto.request.CartItemRequest;
 import eCommerce.com.eCommerce.dto.request.RemoveItemFromCartRequest;
 import eCommerce.com.eCommerce.dto.request.UpdateItemInTheCartRequest;
+import eCommerce.com.eCommerce.model.CartItem;
 import org.springframework.security.core.Authentication;
 
 
@@ -17,4 +18,5 @@ public interface CartItemService {
     List<CartItemDto> getCartItemsByCartId(Authentication authentication);
 
     String updateQuantityInTheCart(UpdateItemInTheCartRequest request, Authentication authentication);
+
 }

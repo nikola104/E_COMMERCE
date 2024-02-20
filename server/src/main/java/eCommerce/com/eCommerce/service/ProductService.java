@@ -11,10 +11,12 @@ import java.io.IOException;
 public interface ProductService {
     String saveProduct(ProductRequest productRequest, MultipartFile image) throws IOException;
 
-    ProductDto getProductById(Long id);
+    ProductDto getProductById(Long id) throws IOException;
     Product findProductById(Long id);
  // za sq ne   void updateProductQuantityAfterCartAddition(Long productId, int quantity);
 
     String updateProductQuantity(Long id, UpdateQuantityRequest updateQuantityRequest);
     void saveProduct(Product product);
+
+    String deleteProduct(Long id);
 }

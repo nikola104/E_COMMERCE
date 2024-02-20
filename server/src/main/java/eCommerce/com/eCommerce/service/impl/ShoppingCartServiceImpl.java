@@ -4,12 +4,11 @@ import eCommerce.com.eCommerce.dto.response.ShoppingCartResponse;
 import eCommerce.com.eCommerce.exception.ShoppingCartNotFoundException;
 import eCommerce.com.eCommerce.model.ShoppingCart;
 import eCommerce.com.eCommerce.repository.ShoppingCartRepository;
-import eCommerce.com.eCommerce.service.ProductService;
 import eCommerce.com.eCommerce.service.ShoppingCartService;
 import eCommerce.com.eCommerce.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -61,7 +60,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartResponse getCart(Long userId) {
+    public ShoppingCartResponse getCart(Authentication authentication) {
+        var userId = userService.findUserIdByAuthentication(authentication);
         var shoppingCart = findShoppingCartByUserId(userId);
         return ShoppingCartResponse.builder()
                 .totalItems(shoppingCart.getTotalItems())
