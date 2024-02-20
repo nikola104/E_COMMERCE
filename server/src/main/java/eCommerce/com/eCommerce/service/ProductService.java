@@ -17,4 +17,6 @@ public interface ProductService {
 
     String updateProductQuantity(Long id, UpdateQuantityRequest updateQuantityRequest);
     void saveProduct(Product product);
+
+    String deleteProduct(Long id);
 }

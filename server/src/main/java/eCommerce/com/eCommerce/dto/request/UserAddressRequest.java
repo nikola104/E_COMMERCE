@@ -36,6 +36,5 @@ public class UserAddressRequest {
     @NotNull(message = "Invalid phoneNumber  is NULL")
     @Pattern(regexp = "^\\d{10}$", message = "Invalid Phone Number")
     private String phoneNumber;
-    @NotNull(message = "Invalid user is NULL")
-    private User user;
+
 }

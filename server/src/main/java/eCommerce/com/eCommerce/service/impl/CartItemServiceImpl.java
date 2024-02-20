@@ -219,6 +219,7 @@ public class CartItemServiceImpl implements CartItemService {
         return returnString;
     }
 
+
     private void updateQuantitiesAndPricesIfQuantityIsLessThanThePreviousOne(CartItem cartItem, UpdateItemInTheCartRequest request, ShoppingCart cart, Product product) {
         //quantity to remove
         Long quantityToRemove = cartItem.getQuantity() - request.getQuantity();

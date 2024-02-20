@@ -19,9 +19,5 @@ public class ReviewRequest {
     private Double rating;
     @NotNull(message = "Invalid userId is NULL")
     private Long productId;
-    @NotNull(message = "Invalid userId is NULL")
-    private Long userId;
-
-
 
 }

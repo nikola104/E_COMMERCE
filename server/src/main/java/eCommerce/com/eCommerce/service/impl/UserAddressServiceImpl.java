@@ -2,7 +2,6 @@ package eCommerce.com.eCommerce.service.impl;
 
 
 import eCommerce.com.eCommerce.dto.UserAddressDto;
-import eCommerce.com.eCommerce.dto.UserInfoDto;
 import eCommerce.com.eCommerce.dto.request.UserAddressRequest;
 import eCommerce.com.eCommerce.exception.UserNotFoundException;
 import eCommerce.com.eCommerce.model.UserAddress;
@@ -11,6 +10,7 @@ import eCommerce.com.eCommerce.service.UserAddressService;
 import eCommerce.com.eCommerce.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,15 +36,16 @@ public class UserAddressServiceImpl implements UserAddressService {
 
 
     @Override
-    public UserAddress saveUserAddress(UserAddressRequest userAddressRequest) {
+    public UserAddress saveUserAddress(UserAddressRequest userAddressRequest, Authentication authentication) {
         List<UserAddress> userAddressList = userAddressRepository.findAll();
         for(UserAddress userAddress : userAddressList){
             if(userAddress.getPhoneNumber().equals(userAddressRequest.getPhoneNumber())){
                 throw new UserNotFoundException("This phone number already exists!");
             }
         }
+        var userId = userService.findUserIdByAuthentication(authentication);
 
-        var user = userService.getUserById(userAddressRequest.getUser().getId());
+        var user = userService.getUserById(userId);
         var userAddress = UserAddress.builder()
                 .phoneNumber(userAddressRequest.getPhoneNumber())
                 .city(userAddressRequest.getCity())
@@ -57,12 +58,14 @@ public class UserAddressServiceImpl implements UserAddressService {
 
 
             return userAddressRepository.save(userAddress);
+        // TODO: 2/20/2024  za sq mi pravi tuka nqkakvi chakmaci da go proverq po kusno za sq mi dava sendError call .....
 
     }
 
     @Override
-    public UserAddressDto getUserAddress(Long id) {
-        var userAddress = userAddressRepository.findByUserId(id).orElseThrow(() -> new UserNotFoundException("User address not found!"));
+    public UserAddressDto getUserAddress(Authentication authentication) {
+        var userId = userService.findUserIdByAuthentication(authentication);
+        var userAddress = userAddressRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("User address not found!"));
 
 
         var userAddressDto = UserAddressDto.builder()
@@ -79,22 +82,24 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
-    public String deleteUserAddress(Long id) {
-        var userAddress = userAddressRepository.findByUserId(id).orElseThrow(() -> new UserNotFoundException("User address not found!"));
+    public String deleteUserAddress(Authentication authentication) {
+        var userId = userService.findUserIdByAuthentication(authentication);
+        var userAddress = userAddressRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("User address not found!"));
         userAddressRepository.deleteByUserId(userAddress.getUser().getId());
         return "User address deleted successfully!";
 
     }
 
     @Override
-    public String updateUserAddress(Long id, UserAddressRequest userAddressRequest) {
-        var userAddress = userAddressRepository.findByUserId(id).orElseThrow(() -> new UserNotFoundException("User address not found!"));
-        userAddress.setAddressLine1(userAddressRequest.getAddressLine1());
-        userAddress.setAddressLine2(userAddressRequest.getAddressLine2());
-        userAddress.setCity(userAddressRequest.getCity());
-        userAddress.setCountry(userAddressRequest.getCountry());
-        userAddress.setPhoneNumber(userAddressRequest.getPhoneNumber());
-        userAddress.setPostcode(userAddressRequest.getPostcode());
+    public String updateUserAddress(UserAddressRequest request, Authentication authentication) {
+        var userId = userService.findUserIdByAuthentication(authentication);
+        var userAddress = userAddressRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("User address not found!"));
+        userAddress.setAddressLine1(request.getAddressLine1());
+        userAddress.setAddressLine2(request.getAddressLine2());
+        userAddress.setCity(request.getCity());
+        userAddress.setCountry(request.getCountry());
+        userAddress.setPhoneNumber(request.getPhoneNumber());
+        userAddress.setPostcode(request.getPostcode());
 
         userAddressRepository.save(userAddress);
         return "User address updated successfully!";

@@ -51,7 +51,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = true)
     private Type type;
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private CartItem cartItem;
     @OneToOne(mappedBy = "product")
     private OrderItem orderItem;

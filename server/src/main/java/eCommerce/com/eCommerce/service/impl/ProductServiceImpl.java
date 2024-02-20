@@ -26,14 +26,18 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewService reviewService;
     private final TypeService typeService;
 
+    private final CartItemService cartItemService;
+
+
     private final static Logger LOGGER = LoggerFactory.
             getLogger(ProductService.class);
 
-    public ProductServiceImpl(ProductRepository productRepository, SubcategoryService subcategoryService, ReviewService reviewService, TypeService typeService) {
+    public ProductServiceImpl(ProductRepository productRepository, SubcategoryService subcategoryService, ReviewService reviewService, TypeService typeService, CartItemService cartItemService) {
         this.productRepository = productRepository;
         this.subcategoryService = subcategoryService;
         this.reviewService = reviewService;
         this.typeService = typeService;
+        this.cartItemService = cartItemService;
     }
 
     @Override
@@ -83,14 +87,8 @@ public class ProductServiceImpl implements ProductService {
         product.setViews(product.getViews() + 1);
 
         //checking the quantity status of the product
-        String quantityStatus = null;
+        String quantityStatus = checkingQuantityStatus(product.getQuantity());
 
-        if(product.getQuantity() <= 10){
-            quantityStatus = "RUNNING LOW - Less than 10 available";
-        }
-        if(product.getQuantity() <= 20 && product.getQuantity() > 10){
-            quantityStatus = "HURRY UP - Selling out fast!";
-        }
 
         product.setQuantityStatus(quantityStatus);
         productRepository.save(product);
@@ -109,13 +107,8 @@ public class ProductServiceImpl implements ProductService {
         var product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
         product.setQuantity(updateQuantityRequest.getQuantity());
         //updating the quantity status of the product
-        String quantityStatus = null;
-        if(product.getQuantity() <= 10){
-            quantityStatus = "RUNNING LOW - Less than 10 available";
-        }
-        if(product.getQuantity() <= 20 && product.getQuantity() > 10){
-            quantityStatus = "HURRY UP - Selling out fast!";
-        }
+        String quantityStatus = checkingQuantityStatus(updateQuantityRequest.getQuantity());
+
         product.setQuantityStatus(quantityStatus);
         productRepository.save(product);
         return "Product quantity updated successfully!";
@@ -127,6 +120,15 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException("Product is null!");
         }
         productRepository.save(product);
+    }
+
+    @Override
+    public String deleteProduct(Long id) {
+        var product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+
+        productRepository.delete(product);
+        LOGGER.info("Product with id: " + id + " deleted successfully!");
+        return "Product deleted successfully!";
     }
 
     private ProductDto getProductRightProduct(Product product, List<Review> productReviews) {
@@ -172,14 +174,9 @@ public class ProductServiceImpl implements ProductService {
         return sku;
     }
     public Product saveProductWithType(ProductRequest productRequest, byte[] imageData, String sku, Type type){
-        String quantityStatus = null;
 
-        if(productRequest.getQuantity() <= 10){
-            quantityStatus = "RUNNING LOW - Less than 10 available";
-        }
-        if(productRequest.getQuantity() <= 20 && productRequest.getQuantity() > 10){
-            quantityStatus = "HURRY UP - Selling out fast!";
-        }
+        String quantityStatus = checkingQuantityStatus(productRequest.getQuantity());
+
         return Product.builder()
                 .productName(productRequest.getProductName())
                 .description(productRequest.getDescription())
@@ -197,16 +194,9 @@ public class ProductServiceImpl implements ProductService {
     }
     public Product saveProductWithSubcategory(ProductRequest productRequest, byte[] imageData, String sku, Subcategory subcategory){
 
-        String quantityStatus = null;
+        String quantityStatus = checkingQuantityStatus(productRequest.getQuantity());
 
-        if(productRequest.getQuantity() < 10){
-            quantityStatus = "RUNNING LOW - Less than 10 available";
-        }
-        if(productRequest.getQuantity() <= 20 && productRequest.getQuantity() > 10){
-            quantityStatus = "HURRY UP - Selling out fast!";
-        }
-
-       return Product.builder()
+        return Product.builder()
                 .productName(productRequest.getProductName())
                 .description(productRequest.getDescription())
                 .color(productRequest.getColor())
@@ -220,5 +210,17 @@ public class ProductServiceImpl implements ProductService {
                 .createdAt(LocalDateTime.now())
                 .subcategory(subcategory)
                 .build();
+    }
+
+    private static String checkingQuantityStatus(Long quantity) {
+        String quantityStatus = null;
+
+        if(quantity <= 10){
+            quantityStatus = "RUNNING LOW - Less than 10 available";
+        }
+        if(quantity <= 20 && quantity > 10){
+            quantityStatus = "HURRY UP - Will Selling out fast!";
+        }
+        return quantityStatus;
     }
 }

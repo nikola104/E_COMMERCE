@@ -1,8 +1,8 @@
 package eCommerce.com.eCommerce.service;
 
 import eCommerce.com.eCommerce.dto.response.ShoppingCartResponse;
-import eCommerce.com.eCommerce.model.CartItem;
 import eCommerce.com.eCommerce.model.ShoppingCart;
+import org.springframework.security.core.Authentication;
 
 public interface ShoppingCartService {
     void createShoppingCart(Long userId);
@@ -10,7 +10,7 @@ public interface ShoppingCartService {
 
     ShoppingCart findShoppingCartByUserId(Long shoppingCartId);
 
-    ShoppingCartResponse getCart(Long userId);
+    ShoppingCartResponse getCart(Authentication authentication);
 
 
 
