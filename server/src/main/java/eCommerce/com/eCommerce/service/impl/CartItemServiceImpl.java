@@ -22,6 +22,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,7 +83,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .quantity(cartItemRequest.getQuantity())
                 .price(product.getPrice() * cartItemRequest.getQuantity())
                 .singlePrice(product.getPrice())
-                // TODO: 2/20/2024  add image path
+                .imagePath(product.getImagePath())
                 .addedAt(LocalDateTime.now())
                 .build();
 
@@ -177,14 +180,21 @@ public class CartItemServiceImpl implements CartItemService {
         if(shoppingCart.isEmpty()){
             throw new ShoppingCartNotFoundException("Your cart is empty!");
         }
+
        return shoppingCart.stream()
-               .map(cartItem -> CartItemDto.builder()
-                       .productName(cartItem.getProduct().getProductName())
-                       .quantity(cartItem.getQuantity())
-                       // TODO: 2/20/2024  add image path
-                       .totalPrice(cartItem.getPrice())
-                       .productPrice(cartItem.getProduct().getPrice())
-                          .build())
+               .map(cartItem -> {
+                   try {
+                       return CartItemDto.builder()
+                               .productName(cartItem.getProduct().getProductName())
+                               .quantity(cartItem.getQuantity())
+                               .productImage(Files.readAllBytes(new File(cartItem.getImagePath()).toPath()))
+                               .totalPrice(cartItem.getPrice())
+                               .productPrice(cartItem.getProduct().getPrice())
+                                  .build();
+                   } catch (IOException e) {
+                       throw new RuntimeException(e+"  Image not found");
+                   }
+               })
                .collect(Collectors.toList());
 
 
