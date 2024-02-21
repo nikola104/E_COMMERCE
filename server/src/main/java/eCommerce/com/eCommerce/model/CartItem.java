@@ -23,9 +23,8 @@ CartItem {
     private double price;
     @Column(nullable = false, name = "single_price")
     private Double singlePrice;
-    @Lob
-    @Column(columnDefinition = "LONGBLOB",nullable = true, name = "image_data")
-    private byte[] imageData;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(nullable = false, name = "added_at")
     private LocalDateTime addedAt;
     @OneToOne
