@@ -5,11 +5,8 @@ import storageService from "./storage-service";
 
 class AuthService extends WebApiService {
 
-  async makeLoginRequest(username, password) {
-    let response = await axios.post(SERVER_URL + "api/v1/auth/authenticate", {
-      username,
-      password,
-    });
+  async makeLoginRequest(loginRequest) {
+    let response = await axios.post(SERVER_URL + "api/v1/auth/authenticate", loginRequest);
 
     if (response.status != 200) {
       throw "Error: " + response.data.message;

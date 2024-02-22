@@ -10,6 +10,7 @@ import AuthGuardWhenLogout from './components/authguard/AuthGuardWhenLogout';
 import AuthGuardWhenLogin from './components/authguard/AuthGuardWhenLogin';
 import CustomerRegister from './pages/register/CustomerRegister';
 import CustomerLogin from './pages/Login/CustomerLogin';
+import Dashboard from './pages/dashboard/Dashboard';
 
 
 
@@ -25,6 +26,9 @@ const App = createBrowserRouter(
 
         </Route>
           <Route element={<AuthGuardWhenLogin />}>
+
+              <Route path="dashboard" element={<Dashboard/>} />
+          
         
         </Route>
     </>

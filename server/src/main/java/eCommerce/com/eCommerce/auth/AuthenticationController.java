@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,7 @@ public class AuthenticationController {
 
 
 
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request){
         String response = authenticationService.register(request);
@@ -30,7 +33,6 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request){
-
         return ResponseEntity.ok(authenticationService.authenticate(request));
 
     }

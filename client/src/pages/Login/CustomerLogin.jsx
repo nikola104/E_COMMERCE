@@ -2,55 +2,56 @@ import React, { useState, useEffect } from "react";
 import "./customerLogin.css";
 import Chasovnika from "../../assets/images/woman.png"
 import {  useNavigate } from "react-router-dom";
+import authService from '../../services/auth-service';
 
 
 
 
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const [loginRequest, setLoginRequest] = useState(
+    {
+      email: "",
+      password: ""
+    }
+  )
+
   const [invalidCredentialsMessage, setInvalidCredentialsMessage] = useState(null);
   const [notEnabledAcc, setNotEnabledAcc] = useState(null);
   
-  let navigate = useNavigate();
-useEffect(() => {
-  const hideMessages = () => {
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setLoginRequest({...loginRequest,[e.target.name]: value})
     setInvalidCredentialsMessage(null);
-    setNotEnabledAcc(null);
-  };
-
-  if(invalidCredentialsMessage || notEnabledAcc){
-    const timeoutId = setTimeout(hideMessages, 4000);
-
-    return ()=> clearTimeout(timeoutId);
-  }
-
+  
+}
 
   
-}, [invalidCredentialsMessage,notEnabledAcc])
+
 
 
 const submit = async (e) => {
-    e.preventDefault();
-    try {
-        await authService.makeLoginRequest(username, password);
-       
-        navigate("/dashboard");
-    } catch (err) {
-        // show error to user in user-friendly way
-        console.log(err)
-        if (err.response && err.response.status === 403) {
-          setNotEnabledAcc("Not verified account!");
-          setUsername("");
-          setPassword("");        
-      } else {
-          setInvalidCredentialsMessage(err.response.data.message);
-          setUsername("");
-          setPassword("");
-      }
-    }
-  };
+  e.preventDefault();
+  try {
+      await authService.makeLoginRequest(loginRequest);
+     
+      navigate("/dashboard");
+  } catch (error) {
+    console.log(error.response.data.errors);
+     const errorMessage = error.response.data.errors[0];
+  if(errorMessage === "Invalid email or password"){
+    setInvalidCredentialsMessage("Invalid email or password!");
+    setLoginRequest(prevLoginRequest => ({ ...prevLoginRequest, password: '' , email: ''}));
+    
+
+  }
+  
+    
+  }
+};
+
 
   return (
     <>
@@ -72,14 +73,11 @@ const submit = async (e) => {
                     
                       <div className="form-floating mb-3">
                            <input type="text" 
-                            id="username"
-                            name="username"
-                            value={username}
-                            onChange={(e) => {
-                            setUsername(e.currentTarget.value);
-                              }}
-                           className="form-control bg-white text-dark" required placeholder="Username"/>
-                           <label htmlFor="floatingUsername">Username</label>
+                            id="email"
+                            name="email"
+                            value={loginRequest.email} onChange={(e) => handleChange(e)}
+                           className="form-control bg-white text-dark" required placeholder="Email"/>
+                           <label htmlFor="floatingUsername">Email</label>
                       </div>
                    
 
@@ -87,10 +85,7 @@ const submit = async (e) => {
                            <input type="password" 
                             id="password"
                             name="password"
-                            value={password}
-                            onChange={(e) => {
-                            setPassword(e.currentTarget.value);
-                              }}
+                            value={loginRequest.password} onChange={(e) => handleChange(e)}
                            className="form-control bg-white text-dark" required placeholder="Password"/>
                            <label htmlFor="floatingPassord">Password</label>
                       </div>
