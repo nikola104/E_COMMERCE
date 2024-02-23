@@ -17,20 +17,20 @@ import Dashboard from './pages/dashboard/Dashboard';
 const App = createBrowserRouter(
   createRoutesFromElements(
     <>
-        <Route element={<AuthGuardWhenLogout />}>
+        {/* <Route element={<AuthGuardWhenLogout />}> */}
           <Route path="/">
             <Route path="login" element={<CustomerLogin/>} />
             <Route path="register" element={<CustomerRegister/>} />
           
           </Route>
 
-        </Route>
-          <Route element={<AuthGuardWhenLogin />}>
+        {/* </Route> */}
+          {/* <Route element={<AuthGuardWhenLogin />}> */}
 
               <Route path="dashboard" element={<Dashboard/>} />
           
         
-        </Route>
+        {/* </Route> */}
     </>
   )
 );

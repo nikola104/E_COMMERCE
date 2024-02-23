@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
-import Choveka from "../../assets/images/woamn2.png"
+import Choveka from "../../assets/images/dedo.png"
+import backgroundImage from "../../assets/images/bckg.jpg"
 import "./customerRegister.css"
 import { useNavigate } from "react-router-dom";
 import authService from '../../services/auth-service';
@@ -80,6 +81,20 @@ const CustomerRegister = () => {
 
   return (
     <>
+    <div  style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center', // Center the content vertically and horizontally
+        padding: '5rem 0', // Add padding to the top and bottom to center the content vertically
+      }}
+    >
+     
     <section className="vh-100" style={{ marginTop: '5rem' }}>
       <div className="container h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -177,7 +192,7 @@ const CustomerRegister = () => {
         </div>
       </div>
     </section>
-
+    </div>
     </>
   )
 }

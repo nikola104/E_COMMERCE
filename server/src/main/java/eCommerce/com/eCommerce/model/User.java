@@ -51,7 +51,6 @@ public class User implements UserDetails {
     private Set<Review> reviews;
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private OrderDetails orderDetails;
-
     //from UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

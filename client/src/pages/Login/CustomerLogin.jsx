@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./customerLogin.css";
 import Chasovnika from "../../assets/images/woman.png"
+import backgroundImage from "../../assets/images/try.jpeg"
 import {  useNavigate } from "react-router-dom";
 import authService from '../../services/auth-service';
 
@@ -25,6 +26,7 @@ const Login = () => {
     const value = e.target.value;
     setLoginRequest({...loginRequest,[e.target.name]: value})
     setInvalidCredentialsMessage(null);
+    setNotEnabledAcc(null);
   
 }
 
@@ -41,13 +43,14 @@ const submit = async (e) => {
   } catch (error) {
     console.log(error.response.data.errors);
      const errorMessage = error.response.data.errors[0];
-  if(errorMessage === "Invalid email or password"){
+  if(errorMessage === "Invalid email or password" || errorMessage === "Invalid Email"){
     setInvalidCredentialsMessage("Invalid email or password!");
-    setLoginRequest(prevLoginRequest => ({ ...prevLoginRequest, password: '' , email: ''}));
-    
-
+    setLoginRequest(prevLoginRequest => ({ ...prevLoginRequest, password: '' , email: ''})); 
   }
-  
+  if(errorMessage === "User is not verified!"){
+    setNotEnabledAcc("User is not verified!");
+    setLoginRequest(prevLoginRequest => ({ ...prevLoginRequest, password: '' , email: ''}));
+    }
     
   }
 };
@@ -55,7 +58,19 @@ const submit = async (e) => {
 
   return (
     <>
-
+   <div  style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center', // Center the content vertically and horizontally
+        padding: '5rem 0', // Add padding to the top and bottom to center the content vertically
+      }}
+    >
    
     <section className="vh-100" style={{ marginTop: '5rem' }}>
     <div className="container h-100">
@@ -72,7 +87,7 @@ const submit = async (e) => {
 
                     
                       <div className="form-floating mb-3">
-                           <input type="text" 
+                           <input type="email" 
                             id="email"
                             name="email"
                             value={loginRequest.email} onChange={(e) => handleChange(e)}
@@ -119,7 +134,7 @@ const submit = async (e) => {
       </div>
     </div>
   </section>
-
+  </div>
   </>
   );
 };

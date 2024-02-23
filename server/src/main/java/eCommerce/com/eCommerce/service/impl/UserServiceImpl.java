@@ -90,4 +90,11 @@ public class UserServiceImpl implements UserService {
         User user = (User) authentication.getPrincipal();
         return user.getId();
     }
+
+    @Override
+    public void enableUserAccount(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        user.setIsVerified(true);
+        userRepository.save(user);
+    }
 }
