@@ -24,4 +24,5 @@ public interface UserService {
     Long getUserIdByEmail(String email);
 
     Long findUserIdByAuthentication(Authentication authentication);
+    void enableUserAccount(String email);
 }
