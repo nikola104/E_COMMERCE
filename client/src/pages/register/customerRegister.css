@@ -131,3 +131,9 @@ input[type="submit"]:hover {
   }
 
   
+/* Define shading styles */
+.form-wrapper {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    padding: 20px; /* Add some padding for spacing */
+    border-radius: 10px; /* Add border-radius for rounded corners */
+  }

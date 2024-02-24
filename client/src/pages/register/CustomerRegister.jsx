@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import Choveka from "../../assets/images/dedo.png"
-import backgroundImage from "../../assets/images/bckg.jpg"
+import backgroundImage from "../../assets/images/cher2.jpg"
 import "./customerRegister.css"
 import { useNavigate } from "react-router-dom";
 import authService from '../../services/auth-service';
@@ -100,7 +100,7 @@ const CustomerRegister = () => {
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-lg-12 col-xl-11">
             <div className="card text-black" style={{ borderRadius: '25px' }}>
-              <div className="card-body p-md-5">
+              <div className="card-body p-md-5 shaded-background">
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
@@ -182,7 +182,7 @@ const CustomerRegister = () => {
                   <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
                     <img src={Choveka}
-                      className="img-fluid rounded-circle " alt="Sample image" />
+                      className="img-fluid  " alt="Sample image" />
 
                   </div>
                 </div>

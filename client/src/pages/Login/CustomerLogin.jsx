@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./customerLogin.css";
 import Chasovnika from "../../assets/images/woman.png"
-import backgroundImage from "../../assets/images/try.jpeg"
+import backgroundImage from "../../assets/images/zeleno.jpg"
 import {  useNavigate } from "react-router-dom";
 import authService from '../../services/auth-service';
 
@@ -124,7 +124,7 @@ const submit = async (e) => {
                 <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
                   <img src={Chasovnika}
-                    className="img-fluid rounded-circle" alt="Sample image" />
+                    className="img-fluid " alt="Sample image" />
 
                 </div>
               </div>
