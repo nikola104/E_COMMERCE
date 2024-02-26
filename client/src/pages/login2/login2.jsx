@@ -1,27 +1,78 @@
-import React from 'react'
-import "./login2.css"
+import React, { useState } from 'react';
+import signInImage from "../../assets/images/reg.svg"
+import signUpImage from "../../assets/images/log.svg"
+import authService from '../../services/auth-service';
+import {  useNavigate } from "react-router-dom";
+import "./login2.css";
 
-const login2 = () => {
+const Login2 = () => {
+  const navigate = useNavigate();
 
-    
-  return (
-    <>
-    <div class="register-photo">
-        <div class="form-container">
-            <div class="image-holder"></div>
-            <form method="post">
-                <h2 class="text-center"><strong>Create</strong> an account.</h2>
-                <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"/></div>
-                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"/></div>
-                <div class="form-group"><input class="form-control" type="password" name="password-repeat" placeholder="Password (repeat)"/></div>
-                <div class="form-group">
-                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox"/>I agree to the license terms.</label></div>
-                </div>
-                <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Sign Up</button></div><a href="#" class="already">You already have an account? Login here.</a></form>
-        </div>
-    </div>
-    </>
+  const [loginRequest, setLoginRequest] = useState(
+    {
+      email: "",
+      password: ""
+    }
   )
+
+  const [invalidCredentialsMessage, setInvalidCredentialsMessage] = useState(null);
+  const [notEnabledAcc, setNotEnabledAcc] = useState(null);
+  
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setLoginRequest({...loginRequest,[e.target.name]: value})
+    setInvalidCredentialsMessage(null);
+    setNotEnabledAcc(null);
+  
 }
 
-export default login2
+  
+
+
+
+const submit = async (e) => {
+  e.preventDefault();
+  try {
+      await authService.makeLoginRequest(loginRequest);
+     
+      navigate("/dashboard");
+  } catch (error) {
+    console.log(error.response.data.errors);
+     const errorMessage = error.response.data.errors[0];
+  if(errorMessage === "Invalid email or password" || errorMessage === "Invalid Email"){
+    setInvalidCredentialsMessage("Invalid email or password!");
+    setLoginRequest(prevLoginRequest => ({ ...prevLoginRequest, password: '' , email: ''})); 
+  }
+  if(errorMessage === "User is not verified!"){
+    setNotEnabledAcc("User is not verified!");
+    setLoginRequest(prevLoginRequest => ({ ...prevLoginRequest, password: '' , email: ''}));
+    }
+    
+  }
+};
+
+
+  return (
+    <>
+    <div className='sign-up-form'></div>
+      <h1>Sign Up Now</h1>
+      <form>
+          <input type="email" 
+              id="email"
+              name="email"
+              value={loginRequest.email} onChange={(e) => handleChange(e)}
+              className="form-control bg-white text-dark" required placeholder="Email"/>
+           <input type="password" 
+              id="password"
+              name="password"
+              value={loginRequest.password} onChange={(e) => handleChange(e)}
+              className="form-control bg-white text-dark" required placeholder="Password"/>
+              <p>I agree of terms of services</p>
+      </form>
+
+    </>
+      
+  );
+};
+
+export default Login2;
