@@ -78,12 +78,10 @@ input[type="password"] {
     border: 1px solid #ccc;
     border-radius: 15px;
     font-size: 16px;
-    background-color: #373535;
     color: white;
 }
 
 input[type="submit"] {
-    background-color: #373535;
     color: #fff;
     padding: 8px 100px;
     border: none;
@@ -95,7 +93,6 @@ input[type="submit"] {
 }
 /* Change button background color and add a scale effect on hover */
 input[type="submit"]:hover {
-    background-color: #000; /* Change background color on hover */
     transform: scale(1.05); /* Slight scale increase on hover */
 }
 /* Style the sign-in link */
