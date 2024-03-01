@@ -5,12 +5,21 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import Logo from './../../assets/images/logo.png';
 
 const Header = () => {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary header-color">
       <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+        <Navbar.Brand href="#">
+        <img
+            src={Logo}
+            alt="Navbar Logo"
+            width="200"
+            height="50"
+            className="d-inline-block align-top mx-3"
+          />
+      </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
@@ -38,7 +47,7 @@ const Header = () => {
                   </ul>
                 </div>
                 <input type="hidden" name="search_param" value="all" id="search_param" />
-                <input type="text" className="form-control" name="x" id="search" placeholder="Search" />
+                <input type="text" className="form-control" name="x" id="search" placeholder="Search" style={{width: '800px'}} />
                 <span className="input-group-btn">
                   <button className="btn btn-default" type="button">
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
